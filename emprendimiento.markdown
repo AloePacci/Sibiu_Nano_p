@@ -65,6 +65,9 @@ Para todo esto es importante tener buenos canales de comunicación `Volvemos a l
 Necesario para el 18
 - 5 páginas describiendo todo lo que he puesto aquí
 - un video de 1 minuto
+- El 22 se pone en pocas diapositivas un resumen de las 5 páginas del informe
+
+Esta presentacion son 4 puntos de la nota del curso
 {% endhighlight %}
 
 Ser rápido, contar en primera persona el problema y la solucion que ofrecemos
@@ -87,6 +90,9 @@ ver ejemplos como:
 [ejemplo](./assets/Presentacion.pdf)
 [ejemplo2](./assets/Presentacion2.pdf)
 
+
+![pq](./assets/P1.jpeg)
+|[p2](./assets/P2.jpeg)
 
 Dudas lunes 18
 - aula 306A 12-14h
