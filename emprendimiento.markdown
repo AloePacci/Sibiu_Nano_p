@@ -61,6 +61,12 @@ Para todo esto es importante tener buenos canales de comunicación `Volvemos a l
 
 <h4>Preparación Presentacion</h4>
 
+{% highlight ruby %}
+Necesario para el 18
+- 5 páginas describiendo todo lo que he puesto aquí
+- un video de 1 minuto
+{% endhighlight %}
+
 Ser rápido, contar en primera persona el problema y la solucion que ofrecemos
 
 ver ejemplos como:
