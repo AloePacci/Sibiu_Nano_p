@@ -92,7 +92,7 @@ ver ejemplos como:
 
 
 ![pq](./assets/P1.jpeg)
-|[p2](./assets/P2.jpeg)
+![p2](./assets/P2.jpeg)
 
 Dudas lunes 18
 - aula 306A 12-14h
