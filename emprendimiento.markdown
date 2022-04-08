@@ -1,0 +1,58 @@
+---
+# Feel free to add content and custom Front Matter to this file.
+# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
+
+layout: page
+---
+<h1>Clase 08/04/2022</h1>
+Lunes 18, debe presentarse la idea a concurso (el 22 se expondrá lo presentado el 18)
+
+Esta idea debe contener todo lo visto hasta ahora
+<h4>Tipos de clientes</h4>
+<h4>Productos/Servicios de la empresa</h4>
+<h4>Canales de distribución</h4>
+- DigitalesMovil/Web 
+  - (App) (puedes vender por Amazon, utilizar un distribuidor..., ofertas como Groupon)
+  - hay que centrarse en canales de distribución eligiendo un primario, y 1 o 2 secundarios (tengo una pagina web y el producto lo vendo por amazon/otro).
+- Físicos
+  - Tu eres distribuidor fisico (el paquete lleva la empresa de envios)
+  - Uso dePresonal de ventas, minoristas o mayoristas para la venta de producto. Tu le das el producto, ellos lo venden
+    - En España por ejemplo, el aceite no lo vende el agricultor, se encargan empresas extranjeras
+Si produces, tienes que vender de alguna forma
+<h4>Modelo de ingresos</h4>
+Tenemos que saber porque nos paga el cliente (nuestra fuente de ingresos) y después fijamos el precio (nuestra táctica)
+
+No podemos vender el producto más caro que la competencia si queremos vender (la fijacion de precios es una táctica), el precio que ponemos no es nuestra fuente de ingresos, incrementando el precio no aumentamos los ingresos.
+
+- Fijacion de precios = tacticas para fijar el precio (incluso si es gratis)
+  - Cuanto estan dispuestos a pagar los clientes
+    - Ensayo y error men 
+    - Observando lo que pagan actualmente por productos parecidos
+- Fuentes de ingresos
+  - Puedes vender activos (acciones)
+  - Puedes cobrar una cuota proporcional al uso del servicio (amazon web services) (Fedex, pagas por paquete enviado)
+  - Una cueta de subscripción (Netflix)
+  - Empresas de renting
+  - Pago de licencias (uso de una propiedad intelectual) (uso de domainservices)
+  - Cuota por intermediación (cuota por unir dos partes en una transaccion) (blablacar, airbnb)
+  - Uso de anuncios (permites a otra emrpesa anunciarse)
+
+- Tácticas de fijacion de preciosç
+  - Tenemos precios fijos: lo que nos cuesta el producto + el quintrillon de € que quiero de beneficio (margen de beneficio) (menos usado)
+    - El precio por volumen (si vendemos mucho (economia de escala)), si se compran más vendemos más barato (semiconductores)
+    - Fijamos el precio dependiento de lo que el cliente valore el producto (depende del segmento de clientes)
+  - Precios dinamicos:
+    - Negocias el precio con el cliente (aerolineas)
+    - Mercados en tiempo real (subastas de ebay)
+
+
+
+<h4>Preparación Presentacion</h4>
+
+Dudas lunes 18 ()
+- aula 306A 12-14h
+- aula 107 15-18h
+
+
+
+
