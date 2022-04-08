@@ -45,7 +45,17 @@ No podemos vender el producto más caro que la competencia si queremos vender (l
     - Negocias el precio con el cliente (aerolineas)
     - Mercados en tiempo real (subastas de ebay)
 
+- Fallos tipicos
+  - Fijar el precio en costes
+    - Se basa en la economía interna de la empresaç
+  - fijar el precio con el valor del producto
+    - ¿Qué valoran? (Tiempo que ahorran, esfuerzo,...), hacer pensar el cliente que nuestro producto es único.
+  - Mal estudio del mercado
+    - Saber si el mercado es unilateral o multilateral
+      - Unilateral : te importan los ingresos
+      - Multilateral : te importa el cliente, los ingresos (youtube le interesan los creadores de contenido, no solo lo que ganan con los anuncios)(una productora de musica)
 
+Te puede interesar conseguir usuarios y despues pasar a hacer pagar al usuario por el servicio
 
 <h4>Preparación Presentacion</h4>
 
