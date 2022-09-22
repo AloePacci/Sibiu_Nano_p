@@ -18,6 +18,7 @@ class Message_sender:
         try:
             self.vehicle = connect("192.168.2.1:8002",wait_ready=False, baud=115200, timeout=6.0, source_system=36, source_component=93)
             self.vehicle.add_message_listener('*', self.vehicle_status_callback)
+
             #self.cmds = self.vehicle.commands
             #self.cmds.download()
             #self.cmds.wait_ready()
@@ -43,7 +44,7 @@ class Message_sender:
 
         print(f"Connection SUCCESS")
         self.vehicle.mode = VehicleMode("ALT_HOLD")
-        #self.vehicle.arm()
+        self.vehicle.arm()
         print(f"armed")
         #self.vehicle.play_tune("AAAA")
         for i in range(2):
@@ -79,8 +80,8 @@ class Message_sender:
 
     
     def vehicle_status_callback(self, vehicle, name, msg):
-        with open("message.txt","w") as f:
-            f.write(f"{name} : {msg}")
+        with open("message.txt","a") as f:
+            f.write(f"{name} : {msg}\n")
 
 
 """
