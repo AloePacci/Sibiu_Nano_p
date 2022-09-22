@@ -19,6 +19,7 @@ class Logger:
             self.vehicle = connect("192.168.2.1:8001", timeout=6.0, source_system=1, source_component=93)
             #listener for custom messages
             #self.vehicle.add_message_listener('*', self.vehicle_status_callback)
+            self.vehicle.add_message_listener('SCALED_PRESSURE2', self.pressure_read)
             self.cmds = self.vehicle.commands
             self.cmds.download()
             self.cmds.wait_ready()
@@ -42,8 +43,6 @@ class Logger:
             self.bat.append(self.vehicle.battery.voltage)
             self.chann.append(self.vehicle.channels)
             self.deep.append(self.vehicle.location.global_relative_frame.alt)
-            self.pres.append(0)
-            self.presd.append(0)
             self.sdif.append(0)
             self.state.append(self.vehicle.system_status.state)
             self.yaw.append(self.vehicle.attitude.yaw)
@@ -90,10 +89,18 @@ class Logger:
             self.ekf=[]
             self.speed=[]
             self.airspeed=[]
+            self.pres_temp=[]
+
 
     def vehicle_status_callback(self, vehicle, name, msg):
         with open("messages.txt","a") as f:
             f.write(f"{name} : {msg}\n")    
+
+
+    def pressure_read(self,vehicle, name, msg):
+        self.pres.append(msg.press_abs)
+        self.presd.append(msg.press_diff)
+        self.pres_temp.append(msg.temperature)
 
 """
 aux=datetime.today()   

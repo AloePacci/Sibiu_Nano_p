@@ -16,8 +16,8 @@ class Message_sender:
         # Send a ping to start connection and wait for any reply.
 
         try:
-            self.vehicle = connect("192.168.2.1:8001",wait_ready=False, baud=115200, timeout=6.0, source_system=36, source_component=93)
-            #self.vehicle.add_message_listener('SYS_STATUS', self.vehicle_status_callback)
+            self.vehicle = connect("192.168.2.1:8002",wait_ready=False, baud=115200, timeout=6.0, source_system=36, source_component=93)
+            self.vehicle.add_message_listener('*', self.vehicle_status_callback)
             #self.cmds = self.vehicle.commands
             #self.cmds.download()
             #self.cmds.wait_ready()
@@ -52,13 +52,6 @@ class Message_sender:
         self.vehicle.mode = VehicleMode("MANUAL")
         print(f"disarmed")
 
-
-
-    def vehicle_status_callback(self, vehicle, name, msg):
-        if self.once==True:
-            print(f"{name} : {msg}")
-            self.once=False
-
     def goto_deep(self, deepness):
         msg = self.vehicle.message_factory.SET_POSITION_TARGET_GLOBAL_INT(
             0, 0, 0,  # time (not used), target system, target component
@@ -85,7 +78,9 @@ class Message_sender:
 
 
     
-
+    def vehicle_status_callback(self, vehicle, name, msg):
+        with open("message.txt","w") as f:
+            f.write(f"{name} : {msg}")
 
 
 """
