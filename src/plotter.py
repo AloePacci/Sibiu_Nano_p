@@ -11,21 +11,25 @@ import pandas as pd
 import time
 
 data=pd.read_csv("out.csv",index_col=0)
+data["mode"]=data["mode"].replace('MANUAL',0)
+data["mode"]=data["mode"].replace('ALT_HOLD',1)
+data["state"]=data["state"].replace('CRITICAL',0)
+data=data.groupby(data.index)
+data=data.mean()
+
 for i in data:
     fig=plt.figure()
     ax = fig.add_subplot(1, 1, 1)
     print(i)
     if i=="mode":
-        data[i]=data[i].replace('MANUAL',0)
-        data[i]=data[i].replace('ALT_HOLD',1)
-        ax.plot(data[i], color='tab:blue')
+        
+        ax.plot(data[~data[i].isnull()][i], color='tab:blue')
         ax.set_yticklabels(["MANUAL", "DEEP_HOLD"])
     elif i=="state":
-        data[i]=data[i].replace('CRITICAL',0)
-        ax.plot(data[i], color='tab:blue')
+        ax.plot(data[~data[i].isnull()][i], color='tab:blue')
         ax.set_yticklabels(["CRITICAL"])
     else:
-        ax.plot(data[i], color='tab:blue')
+        ax.plot(data[~data[i].isnull()][i], color='tab:blue')
     plt.plot()
     plt.xlabel('tiempo')
     plt.ylabel(i)

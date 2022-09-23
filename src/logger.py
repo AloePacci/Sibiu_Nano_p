@@ -15,6 +15,7 @@ import pandas as pd
 class Logger:
     def __init__(self):
         self.once=True
+        self.logged=0
         try:
             self.vehicle = connect("192.168.2.1:8001", timeout=6.0, source_system=1, source_component=93)
             #listener for custom messages
@@ -26,7 +27,7 @@ class Logger:
             self.vehicle.add_message_listener('NAV_CONTROLLER_OUTPUT', self.nav_read)
             self.vehicle.add_message_listener('VFR_HUD', self.vfr_read)
             self.vehicle.add_message_listener('SERVO_OUTPUT_RAW', self.servo_read)
-            self.vehicle.add_message_listener('RC_CHANNELS_RAW ', self.rc_read)
+            self.vehicle.add_message_listener('RC_CHANNELS_RAW', self.rc_read)
             self.vehicle.add_message_listener('SCALED_IMU2', self.imu_read)
             self.vehicle.add_message_listener('GLOBAL_POSITION_INT', self.pos_read)
             self.vehicle.add_message_listener('EKF_STATUS_REPORT', self.ekf_read)
@@ -53,6 +54,8 @@ class Logger:
         while True:
             if len(self.data)>500:
                 self.save_data()
+                self.logged+=1
+                print(self.logged)
             time.sleep(1)
 
     def save_data(self): #may be better with pandas
@@ -62,21 +65,21 @@ class Logger:
         else:
             self.data.to_csv("out.csv",mode="a", header=False)
         #empty dataframe
-        self.data=pd.DataFrame(index=[self.data.index[-1]],columns=["pressure","differential_pressure","pressure_temperature","roll","pitch","yaw","rollspeed","pitchspeed","yawspeed","armed","ekf","state","heading","mode","Vcc","nav_roll","nav_pitch","nav_bearing","wp_dist","alt_error","airspeed","groundspeed","throttle","alt","climb","servo1","servo2","servo3","servo4","servo5","servo6","servo7","servo8","rc1","rc2","rc3","rc4","rc5","rc6","rc7","rc8","xacc","yacc","zacc","xgyro","ygyro","zgyro","xmag","ymag","zmag","lat","lon","altgps"])
+        self.data=pd.DataFrame(index=[self.data.index.max()],columns=["pressure","differential_pressure","pressure_temperature","roll","pitch","yaw","rollspeed","pitchspeed","yawspeed","armed","ekf","state","heading","mode","Vcc","nav_roll","nav_pitch","nav_bearing","wp_dist","alt_error","airspeed","groundspeed","throttle","alt","climb","servo1","servo2","servo3","servo4","servo5","servo6","servo7","servo8","rc1","rc2","rc3","rc4","rc5","rc6","rc7","rc8","xacc","yacc","zacc","xgyro","ygyro","zgyro","xmag","ymag","zmag","lat","lon","altgps"])
 
     def pressure_read(self,vehicle, name, msg):
         self.data=pd.concat([self.data, pd.DataFrame([msg.press_abs, msg.press_diff, msg.temperature],columns=[msg.time_boot_ms]  ,index=["pressure","differential_pressure","pressure_temperature"]).T], sort=True)
     def attitude_read(self,vehicle, name, msg):
         self.data=pd.concat([self.data, pd.DataFrame([msg.roll, msg.pitch, msg.yaw, msg.rollspeed, msg.pitchspeed, msg.yawspeed],columns=[msg.time_boot_ms]  ,index=["roll","pitch","yaw","rollspeed","pitchspeed","yawspeed"]).T], sort=True)
     def sys_read(self,vehicle, name, msg):
-        self.data=pd.concat([self.data, pd.DataFrame([self.vehicle.armed, self.vehicle.ekf_ok, self.vehicle.system_status.state, self.vehicle.mode.name],columns=[self.data.index[-1]]  ,index=["armed","ekf","state","mode"]).T], sort=True)
+        self.data=pd.concat([self.data, pd.DataFrame([int(self.vehicle.armed), int(self.vehicle.ekf_ok), self.vehicle.system_status.state, self.vehicle.mode.name],columns=[self.data.index.max()]  ,index=["armed","ekf","state","mode"]).T], sort=True)
         #self.data=pd.concat([self.data, pd.DataFrame([],columns=[self.data.index[-1]]  ,index=[]).T], sort=True)
     def power_read(self,vehicle, name, msg):
         self.data=pd.concat([self.data, pd.DataFrame([msg.Vcc],columns=[self.data.index[-1]]  ,index=["Vcc"]).T], sort=True)
     def nav_read(self,vehicle, name, msg):
-        self.data=pd.concat([self.data, pd.DataFrame([msg.nav_roll, msg.nav_pitch, msg.nav_bearing, msg.wp_dist, msg.alt_error],columns=[self.data.index[-1]]  ,index=["nav_roll","nav_pitch","nav_bearing","wp_dist","alt_error"]).T], sort=True)
+        self.data=pd.concat([self.data, pd.DataFrame([msg.nav_roll, msg.nav_pitch, msg.nav_bearing, msg.wp_dist, msg.alt_error],columns=[self.data.index.max()]  ,index=["nav_roll","nav_pitch","nav_bearing","wp_dist","alt_error"]).T], sort=True)
     def vfr_read(self,vehicle, name, msg):
-        self.data=pd.concat([self.data, pd.DataFrame([msg.airspeed, msg.groundspeed, msg.heading, msg.throttle, msg.alt, msg.climb],columns=[self.data.index[-1]]  ,index=["airspeed","groundspeed","heading","throttle","alt","climb"]).T], sort=True)
+        self.data=pd.concat([self.data, pd.DataFrame([msg.airspeed, msg.groundspeed, msg.heading, msg.throttle, msg.alt, msg.climb],columns=[self.data.index.max()]  ,index=["airspeed","groundspeed","heading","throttle","alt","climb"]).T], sort=True)
     def servo_read(self,vehicle, name, msg):
         self.data=pd.concat([self.data, pd.DataFrame([msg.servo1_raw, msg.servo2_raw, msg.servo3_raw, msg.servo4_raw, msg.servo5_raw, msg.servo6_raw, msg.servo7_raw, msg.servo8_raw],columns=[msg.time_usec//1000]  ,index=["servo1","servo2","servo3","servo4","servo5","servo6","servo7","servo8"]).T], sort=True)
     def rc_read(self,vehicle, name, msg):
