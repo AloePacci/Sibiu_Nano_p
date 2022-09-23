@@ -1,3 +1,4 @@
+from re import S
 from dronekit import connect, VehicleMode, LocationGlobal
 import pymavlink
 import traceback
@@ -13,17 +14,24 @@ import pandas as pd
 import threading
 from datetime import datetime
 
+import inspect
+
+
+
+class CustomError(Exception):
+    pass
+
 class Logger:
     def __init__(self, vehiculo=None):
-        self.once=True #variable to instanciate the file
-        self.stop=False
+        self.__once=True #variable to instanciate the file
+        self.__stop=False #variable to stop logging to file
         aux=datetime.today()   
-        self.filename=aux.strftime("data %m.%d.%Y..%H.%M.csv")
+        self.filename=aux.strftime("data %m.%d.%Y..%H.%M")
         #instanciate columns so the order is always the same in the file.
         self.data=pd.DataFrame(columns=["pressure","differential_pressure","pressure_temperature","roll","pitch","yaw","rollspeed","pitchspeed","yawspeed","armed","ekf","state","heading","mode","Vcc","nav_roll","nav_pitch","nav_bearing","wp_dist","alt_error","airspeed","groundspeed","throttle","alt","climb","servo1","servo2","servo3","servo4","servo5","servo6","servo7","servo8","rc1","rc2","rc3","rc4","rc5","rc6","rc7","rc8","xacc","yacc","zacc","xgyro","ygyro","zgyro","xmag","ymag","zmag","lat","lon","altgps"])
 
         try:
-            if vehiculo is not None:
+            if vehiculo is None:
                 self.vehicle = connect("192.168.2.1:8001", timeout=6.0, source_system=1, source_component=93) #if we dont specify connection, try this address
             else:
                 self.vehicle=vehiculo
@@ -40,6 +48,7 @@ class Logger:
             self.vehicle.add_message_listener('GLOBAL_POSITION_INT', self.pos_read)
             self.vehicle.add_message_listener('EKF_STATUS_REPORT', self.ekf_read)
             self.vehicle.add_message_listener('BATTERY_STATUS', self.battery_read)
+            #download vehicle params
             self.cmds = self.vehicle.commands
             self.cmds.download()
             self.cmds.wait_ready()
@@ -47,16 +56,20 @@ class Logger:
         except ConnectionRefusedError:
             print(f"Connection refused")
             print("Log module is dead")
+            return
         except OSError:
             print(f"not found in the same network")
             print("Log module is dead")
+            return
         except TimeoutError:
             print(f"port was busy, timeout error")
             print("Log module is dead")
+            return
         except:
             error = traceback.format_exc()
             print(f"Connectiom could not be made, unknown error:\n {error}")
             print("Log module is dead")
+            return
     
 
         #create thread to save data into file
@@ -66,18 +79,18 @@ class Logger:
 
     def save_data(self): 
         print("starting log")
-        while not self.stop:
+        while not self.__stop:
             if len(self.data)>200: #save data once we have few data to save
-                if self.once:#first data?
-                    self.data.to_csv(self.filename,mode="w") #create file at start
-                    self.once=False
+                if self.__once:#first data?
+                    self.data.to_csv("./data/"+self.filename+".csv",mode="w") #create file at start
+                    self.__once=False
                 else:
-                    self.data.to_csv(self.filename,mode="a", header=False) #update file for following data
-                
+                    self.data.to_csv("./data/"+self.filename+".csv",mode="a", header=False) #update file for following data
                 #empty dataframe
                 self.data=pd.DataFrame(index=[self.data.index.max()],columns=["pressure","differential_pressure","pressure_temperature","roll","pitch","yaw","rollspeed","pitchspeed","yawspeed","armed","ekf","state","heading","mode","Vcc","nav_roll","nav_pitch","nav_bearing","wp_dist","alt_error","airspeed","groundspeed","throttle","alt","climb","servo1","servo2","servo3","servo4","servo5","servo6","servo7","servo8","rc1","rc2","rc3","rc4","rc5","rc6","rc7","rc8","xacc","yacc","zacc","xgyro","ygyro","zgyro","xmag","ymag","zmag","lat","lon","altgps"])
             time.sleep(1)
-            print(len(self.data))
+        self.data.to_csv("./data/"+self.filename+".csv",mode="a", header=False) #update file last data
+
 
     def pressure_read(self,vehicle, name, msg):
         self.data=pd.concat([self.data, pd.DataFrame([msg.press_abs, msg.press_diff, msg.temperature],columns=[msg.time_boot_ms]  ,index=["pressure","differential_pressure","pressure_temperature"]).T], sort=True)
@@ -108,8 +121,61 @@ class Logger:
 
 
     def stop_logging(self):
-        self.stop=True
+        self.__stop=True
+
+
+    def print(self, message):
+        print(message)
+        stack = inspect.stack()
+        if len(stack)>2:
+            log=f"{self.data.index.max()}:"
+            for i in stack[1:len(stack)]:
+                aux=i[1].split('\\')[-1]
+                log+=f"{aux} {i[2]}, {i[3]} > "
+            log=log[0:-2]
+            log+=F": {message}"
+        else:
+            log=f"{self.data.index.max()}:"
+            info=stack[1]
+            file, line, func = info[1:4]
+            aux=file.split('\\')[-1]
+            log+=f"{aux} {line}, {func} : {message}"
+        with open("./log/"+self.filename+".txt","a") as f:
+            f.write(f"{log}\n")
+            
+
+    def log(self, message):
+        stack = inspect.stack()
+        #here = stack[1]
+        if len(stack)>2:
+            log=f"{self.data.index.max()}:"
+            for i in stack[1:len(stack)]:
+                aux=i[1].split('\\')[-1]
+                log+=f"{aux} {i[2]}, {i[3]} > "
+            log=log[0:-2]
+            log+=F": {message}"
+        else:
+            log=f"{self.data.index.max()}:"
+            info=stack[1]
+            file, line, func = info[1:4]
+            aux=file.split('\\')[-1]
+            log+=f"{aux} {line}, {func} : {message}"
+        with open("./log/"+self.filename+".txt","a") as f:
+            f.write(f"{log}\n")
+        
+    def wait_till_init(self):
+        while len(self.data)<1:
+            time.sleep(0.1)
+
+
+    def error(self, message):
+        self.stop_logging()
+        error = traceback.format_exc()
+        with open("./log/"+self.filename+"error.txt","a") as f:
+            f.write(f"{message}\n")
+        raise CustomError(f"{message}")
 
 
 if __name__ == '__main__':
     endopoint=Logger()
+    endopoint.print("hola")
