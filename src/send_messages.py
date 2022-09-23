@@ -11,18 +11,15 @@ import time
 
 
 class Message_sender:
-    def __init__(self):
+    def __init__(self, vehiculo=None):
         self.once=True
         # Send a ping to start connection and wait for any reply.
 
         try:
-            self.vehicle = connect("192.168.2.1:8002",wait_ready=False, baud=115200, timeout=6.0, source_system=36, source_component=93)
-            self.vehicle.add_message_listener('*', self.vehicle_status_callback)
-
-            #self.cmds = self.vehicle.commands
-            #self.cmds.download()
-            #self.cmds.wait_ready()
-            #self.home = self.vehicle.home_location
+            if vehiculo is not None:
+                self.vehicle = connect("192.168.2.1:8002",wait_ready=False, baud=115200, timeout=6.0, source_system=36, source_component=93)
+            else:
+                self.vehicle=vehiculo
         except ConnectionRefusedError:
             print(f"Connection refused")
             print("Log module is dead")
@@ -40,18 +37,6 @@ class Message_sender:
             error = traceback.format_exc()
             print(f"Connectiom could not be made, unknown error:\n {error}")
             print("Log module is dead")
-            return
-
-        print(f"Connection SUCCESS")
-        self.vehicle.mode = VehicleMode("ALT_HOLD")
-        self.vehicle.arm()
-        print(f"armed")
-        #self.vehicle.play_tune("AAAA")
-        for i in range(2):
-            time.sleep(1)
-        self.vehicle.disarm()
-        self.vehicle.mode = VehicleMode("MANUAL")
-        print(f"disarmed")
 
     def goto_deep(self, deepness):
         msg = self.vehicle.message_factory.SET_POSITION_TARGET_GLOBAL_INT(
