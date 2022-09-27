@@ -7,27 +7,47 @@ import traceback
 from logger import Logger
 from send_messages import Message_sender
 
+import pygame
+import threading
 
-def main():
-    submarino=Sibiu() #instanciate submarine
-    try:
-        submarino.test() #execute test
-    except:
-        print("test failed")
-        pass
-    
-    # try:
-    #     submarino.handler.play_tune("A") 
-    # except:
-    #     submarino.log.stop_logging()
-    #     submarino.log.error("goto")
 
-        
-    submarino.log.stop_logging()
-    print("finish")
-    #submarino.handler.goto_deep(5) 
-    #submarino.handler.orientate(90)
+
+class Program():
+    def __init__(self):
+        self.submarino=Sibiu() #instanciate submarine
+        self.rc_interrupt=threading.Thread(target=self.save_data)
+        self.rc_interrupt.start()
+        try:
+            self.submarino.test() #execute test
+        except:
+            print("test failed")
+            pass
+
+        print("finish")
+        # try:
+        #     submarino.handler.play_tune("A") 
+        # except:
+        #     submarino.log.stop_logging()
+        #     submarino.log.error("goto")
+        #submarino.handler.goto_deep(5) 
+        #submarino.handler.orientate(90)
     
+    def check_joy_interrupt(self):
+        pygame.init()
+        self.j = pygame.joystick.Joystick(0)
+        self.j.init()
+        while True:
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.JOYAXISMOTION:
+                    if j.get_axis(5)>0:
+                        print("derecho")
+                    elif j.get_axis(4)>0:
+                        print("izquierdo")
+
+    def close(self):
+        self.j.quit()
+        self.submarino.log.stop_logging()
 
 
 class Sibiu:
@@ -78,5 +98,63 @@ class Sibiu:
 
         print(f"Connection SUCCESS")  
 
+
+    
+
 if __name__ == '__main__':
-    main()
+    try:
+        happen=Program()
+    except KeyboardInterrupt:
+        print("EXCITING NOW")
+    except:
+        print("something really bad happened")
+
+
+
+"""TODO:
+def __init__(self):
+    ...
+    self.can_run = threading.Event()
+    self.thing_done = threading.Event()
+    self.thing_done.set()
+    self.can_run.set()    
+
+def run(self):
+    while True:
+        self.can_run.wait()
+        try:
+            self.thing_done.clear()
+            print 'do the thing'
+        finally:
+            self.thing_done.set()
+
+def pause(self):
+    self.can_run.clear()
+    self.thing_done.wait()
+
+def resume(self):
+    self.can_run.set()
+
+
+
+
+
+
+
+
+class CustomThread(Thread):
+    # override the run function
+    def run(self):
+        # block for a moment
+        sleep(1)
+        # display a message
+        print('This is coming from another thread')
+ 
+# create the thread
+thread = CustomThread()
+# start the thread
+thread.start()
+# wait for the thread to finish
+print('Waiting for the thread to finish')
+thread.join()
+"""
