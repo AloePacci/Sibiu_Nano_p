@@ -13,34 +13,38 @@ from logger import Logger
 
 
 class Message_sender:
-    def __init__(self, vehiculo=None, logger=None):        
-        if vehiculo is not None:
-            self.vehicle=vehiculo
-        else: 
-            try:
-                self.vehicle = connect("192.168.2.1:8002",wait_ready=False, baud=115200, timeout=6.0, source_system=36, source_component=93)
-            except ConnectionRefusedError:
-                print(f"Connection refused")
-                print("Log module is dead")
-                return
-            except OSError:
-                error = traceback.format_exc()
-                print(f"not found in the same network \n\n{error}")
-                print("Log module is dead")
-                return
-            except TimeoutError:
-                print(f"port was busy, timeout error")
-                print("Log module is dead")
-                return
-            except:
-                error = traceback.format_exc()
-                print(f"Connectiom could not be made, unknown error:\n {error}")
-                print("Log module is dead")
+    """this function manages the connection to the submarine
+    @params:
+        -ip: ip of the submarine
+        -port: port to connect to
+        -timeout: timeout for connection success
+        -source system: ID for the program in MAVLink
+        -source component: Component ID for the program in MAVLink
+    @returns:
+        it creates the shared variable self.vehicle
+    @notes:
+        if connection fails, it will log and notice reason of fail, killing the program
+    """
 
+    def __init__(self, logger=None, ip="192.168.2.1", port="8003", timeout=6.0, source_system=36, source_component=93):     
         if logger is None:
-            self.log=Logger(vehiculo=self.vehicle)
+            self.log=Logger()
         else:
-            self.log=logger
+            self.log=logger   
+        try:
+            self.vehicle = connect(ip+":"+port,wait_ready=False, baud=115200, timeout=timeout, source_system=source_system, source_component=source_component)
+        except ConnectionRefusedError:
+            self.log.error("Connection to submarine was refused")
+        except OSError:
+            self.log.error("Sibiu was not found in the same network")
+        except TimeoutError:
+            self.log.error("Submarine connection timeout, port is busy")
+        except:
+            self.log.error(f"Connectiom could not be made, unknown error:\n")
+
+        self.log.print(f"Connection SUCCESS")  
+
+
 
     def goto_deep(self, deepness):
         self.log.log(f"asked to go to deep {deepness}")
@@ -86,12 +90,19 @@ class Message_sender:
         self.vehicle.disarm()    
 
     def setmode(self, mode):
-        self.log.log(f"change mode to {mode}")
+        self.log.log(f"mode changed to {mode}")
         self.vehicle.mode = VehicleMode(mode)
-"""
-aux=datetime.today()   
-time_aux=aux.strftime("%m.%d.%Y..%H.%M")"""
 
+    def get_vehicle(self):
+        return self.vehicle
+
+    def safe_close(self):
+        self.vehicle.mode = VehicleMode("MANUAL")
+        self.vehicle.arm()
+
+    def emergency_close(self):
+        self.vehicle.disarm()
+        self.vehicle.mode = VehicleMode("MANUAL")
 
 if __name__ == '__main__':
     endopoint=Message_sender()

@@ -1,19 +1,10 @@
-from re import S
-from dronekit import connect, VehicleMode, LocationGlobal
-import pymavlink
 import traceback
-from math import atan2
-from pymavlink.dialects.v20 import ardupilotmega as mavlink2 #for obstacle distance information
 import time
 import os
-os.environ["MAVLINK20"] = "1"
-
 import numpy as np
 import pandas as pd
-
 import threading
 from datetime import datetime
-
 import inspect
 
 
@@ -30,52 +21,43 @@ class Logger:
         #instanciate columns so the order is always the same in the file.
         self.data=pd.DataFrame(columns=["pressure","differential_pressure","pressure_temperature","roll","pitch","yaw","rollspeed","pitchspeed","yawspeed","armed","ekf","state","heading","mode","Vcc","nav_roll","nav_pitch","nav_bearing","wp_dist","alt_error","airspeed","groundspeed","throttle","alt","climb","servo1","servo2","servo3","servo4","servo5","servo6","servo7","servo8","rc1","rc2","rc3","rc4","rc5","rc6","rc7","rc8","xacc","yacc","zacc","xgyro","ygyro","zgyro","xmag","ymag","zmag","lat","lon","altgps"])
 
-        try:
-            if vehiculo is None:
-                self.vehicle = connect("192.168.2.1:8001", timeout=6.0, source_system=1, source_component=93) #if we dont specify connection, try this address
-            else:
-                self.vehicle=vehiculo
-            #listener for messages
-            self.vehicle.add_message_listener('SCALED_PRESSURE2', self.pressure_read)
-            self.vehicle.add_message_listener('ATTITUDE', self.attitude_read)
-            self.vehicle.add_message_listener('SYS_STATUS', self.sys_read)
-            self.vehicle.add_message_listener('POWER_STATUS', self.power_read)
-            self.vehicle.add_message_listener('NAV_CONTROLLER_OUTPUT', self.nav_read)
-            self.vehicle.add_message_listener('VFR_HUD', self.vfr_read)
-            self.vehicle.add_message_listener('SERVO_OUTPUT_RAW', self.servo_read)
-            self.vehicle.add_message_listener('RC_CHANNELS_RAW', self.rc_read)
-            self.vehicle.add_message_listener('SCALED_IMU2', self.imu_read)
-            self.vehicle.add_message_listener('GLOBAL_POSITION_INT', self.pos_read)
-            self.vehicle.add_message_listener('EKF_STATUS_REPORT', self.ekf_read)
-            self.vehicle.add_message_listener('BATTERY_STATUS', self.battery_read)
-            #download vehicle params
-            self.cmds = self.vehicle.commands
-            self.cmds.download()
-            self.cmds.wait_ready()
-            self.home = self.vehicle.home_location
-        except ConnectionRefusedError:
-            print(f"Connection refused")
-            print("Log module is dead")
-            return
-        except OSError:
-            print(f"not found in the same network")
-            print("Log module is dead")
-            return
-        except TimeoutError:
-            print(f"port was busy, timeout error")
-            print("Log module is dead")
-            return
-        except:
-            error = traceback.format_exc()
-            print(f"Connectiom could not be made, unknown error:\n {error}")
-            print("Log module is dead")
-            return
+
+
+        if vehiculo is None:
+            self.vehicle=None
+            print("no vehicle found")
+        else:
+            self.append_vehicle(vehiculo)
+
+
+    def append_vehicle(self, vehicle):
+        self.log("vehicle found, starting logging")
+        self.vehicle=vehicle
+        #listener for messages
+        self.vehicle.add_message_listener('SCALED_PRESSURE2', self.pressure_read)
+        self.vehicle.add_message_listener('ATTITUDE', self.attitude_read)
+        self.vehicle.add_message_listener('SYS_STATUS', self.sys_read)
+        self.vehicle.add_message_listener('POWER_STATUS', self.power_read)
+        self.vehicle.add_message_listener('NAV_CONTROLLER_OUTPUT', self.nav_read)
+        self.vehicle.add_message_listener('VFR_HUD', self.vfr_read)
+        self.vehicle.add_message_listener('SERVO_OUTPUT_RAW', self.servo_read)
+        self.vehicle.add_message_listener('RC_CHANNELS_RAW', self.rc_read)
+        self.vehicle.add_message_listener('SCALED_IMU2', self.imu_read)
+        self.vehicle.add_message_listener('GLOBAL_POSITION_INT', self.pos_read)
+        self.vehicle.add_message_listener('EKF_STATUS_REPORT', self.ekf_read)
+        self.vehicle.add_message_listener('BATTERY_STATUS', self.battery_read)
+        #download vehicle params
+        self.cmds = self.vehicle.commands
+        self.cmds.download()
+        self.cmds.wait_ready()
+        self.home = self.vehicle.home_location
     
 
         #create thread to save data into file
 
         self.save_thread=threading.Thread(target=self.save_data)
         self.save_thread.start()
+
 
     def save_data(self): 
         print("starting log")
@@ -90,6 +72,7 @@ class Logger:
                 self.data=pd.DataFrame(index=[self.data.index.max()],columns=["pressure","differential_pressure","pressure_temperature","roll","pitch","yaw","rollspeed","pitchspeed","yawspeed","armed","ekf","state","heading","mode","Vcc","nav_roll","nav_pitch","nav_bearing","wp_dist","alt_error","airspeed","groundspeed","throttle","alt","climb","servo1","servo2","servo3","servo4","servo5","servo6","servo7","servo8","rc1","rc2","rc3","rc4","rc5","rc6","rc7","rc8","xacc","yacc","zacc","xgyro","ygyro","zgyro","xmag","ymag","zmag","lat","lon","altgps"])
             time.sleep(1)
         self.data.to_csv("./data/"+self.filename+".csv",mode="a", header=False) #update file last data
+        self.log("log save thread closed")
 
 
     def pressure_read(self,vehicle, name, msg):
