@@ -48,6 +48,7 @@ class Program():
         self.submarino.close()
         self.submarino.handler.safe_close()
         self.running=False
+        self.log.log("close finished")
 
         
     

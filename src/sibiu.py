@@ -17,7 +17,7 @@ class Sibiu(threading.Thread):
         self.handler=Message_sender(logger=self.log) #instatiate communication handler
         self.log.append_vehicle(self.handler.get_vehicle()) #start logging vehicle data
         self.log.wait_till_init() #wait for things to init
-        self.log.log("Connection Success") 
+        self.log.log("Connection Success")
 
     def pause(self):
         pass
@@ -30,9 +30,10 @@ class Sibiu(threading.Thread):
         self.handler.setmode("ALT_HOLD")
         self.handler.arm()
         #self.vehicle.play_tune("AAAA")
-        for i in range(5):
-            self.handler.goto_deep(-i) 
-            time.sleep(1)
+        for i in range (100000):
+            #self.handler.goto_deep(1) 
+            self.handler.orientate(90)
+            time.sleep(0.1)
         self.handler.disarm()
         self.handler.setmode("MANUAL")
         time.sleep(2)
@@ -40,7 +41,8 @@ class Sibiu(threading.Thread):
 
 
     def run(self):
-        self.test()
+        #self.test()
+        pass
 
     def get_id(self):
         # returns id of the respective thread

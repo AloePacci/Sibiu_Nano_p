@@ -25,7 +25,7 @@ class Logger:
 
         if vehiculo is None:
             self.vehicle=None
-            print("no vehicle found")
+            #print("no vehicle found")
         else:
             self.append_vehicle(vehiculo)
 
@@ -81,6 +81,16 @@ class Logger:
         self.data=pd.concat([self.data, pd.DataFrame([msg.roll, msg.pitch, msg.yaw, msg.rollspeed, msg.pitchspeed, msg.yawspeed],columns=[msg.time_boot_ms]  ,index=["roll","pitch","yaw","rollspeed","pitchspeed","yawspeed"]).T], sort=True)
     def sys_read(self,vehicle, name, msg):
         self.data=pd.concat([self.data, pd.DataFrame([int(self.vehicle.armed), int(self.vehicle.ekf_ok), self.vehicle.system_status.state, self.vehicle.mode.name],columns=[self.data.index.max()]  ,index=["armed","ekf","state","mode"]).T], sort=True)
+        try:
+            if self.last_arm!=self.vehicle.armed:
+                self.log("vehicle was armed" if self.vehicle.armed else "vehicle was disarmed")
+            if self.last_mode!=self.vehicle.mode.name:
+                self.log(f"mode changed to {self.vehicle.mode.name}")
+            self.last_arm=self.vehicle.armed
+            self.last_mode=self.vehicle.mode.name
+        except:
+            self.last_arm=self.vehicle.armed
+            self.last_mode=self.vehicle.mode.name
         #self.data=pd.concat([self.data, pd.DataFrame([],columns=[self.data.index[-1]]  ,index=[]).T], sort=True)
     def power_read(self,vehicle, name, msg):
         self.data=pd.concat([self.data, pd.DataFrame([msg.Vcc],columns=[self.data.index.max()]  ,index=["Vcc"]).T], sort=True)
