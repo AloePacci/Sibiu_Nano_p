@@ -5,7 +5,6 @@ import math
 import traceback
 import json
 import requests
-from math import atan2
 from pymavlink.dialects.v20 import ardupilotmega as mavlink2 
 from pymavlink.quaternion import QuaternionBase
 import os
@@ -132,6 +131,24 @@ class Message_sender(threading.Thread):
             0b00000111,  # attitude, throttle, uns,uns,uns,yawrate,pitchrate,rollrate
             QuaternionBase([math.radians(angle) for angle in (0,0,desired_yaw)]), #quaternion
             0,0,0,0)  # roll rate, pitch rate, yaw rate, thrust
+        # send command to vehicle
+        self.vehicle.send_mavlink(msg)
+
+    def conditional_yaw(self, heading, relative=False):
+        if relative:
+            is_relative = 1  # yaw relative to direction of travel
+        else:
+            is_relative = 0  # yaw is an absolute angle
+        # create the CONDITION_YAW command using command_long_encode()
+        msg = self.vehicle.message_factory.command_long_encode(
+            0, 0,  # target system, target component
+            pymavlink.mavutil.mavlink.MAV_CMD_CONDITION_YAW,  # command
+            0,  # confirmation
+            heading,  # param 1, yaw in degrees
+            0,  # param 2, yaw speed deg/s
+            1,  # param 3, direction -1 ccw, 1 cw
+            is_relative,  # param 4, relative offset 1, absolute angle 0
+            0, 0, 0)  # param 5 ~ 7 not used
         # send command to vehicle
         self.vehicle.send_mavlink(msg)
 
