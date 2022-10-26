@@ -1,0 +1,11 @@
+<launch>
+    <arg name="waves" default="false"/>
+    <!-- lanzamos el mundo  -->    
+    <group if="$(arg waves)">
+        <include file="$(find uuv_gazebo_worlds)/launch/ocean_waves.launch"/>
+    </group>
+    <group unless="$(arg waves)">
+        
+        <include file="$(find uuv_gazebo_worlds)/launch/empty_underwater_world.launch"/>
+    </group>
+</launch>

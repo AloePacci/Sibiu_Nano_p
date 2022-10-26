@@ -1,0 +1,25 @@
+A TAM.yaml file will be stored in the config folder once you start a Gazebo world ::
+
+roslaunch uuv_gazebo_worlds empty_underwater_world.launch
+
+and then include the vehicle
+
+roslaunch <ROBOT_NAME>_description upload.launch
+
+and finally run
+
+roslaunch <ROBOT_NAME>_control start_thruster_manager.launch reset_tam:=true
+
+From now on, if you always start the thruster manager using the launch file above (using the reset_tam as false), you can load the TAM matrix.
+
+To command the vehicle, you have to start the thruster manager and publish a ROS Wrench message to the input topic
+
+/<ROBOT_NAME or ROBOT_NAMESPACE>/thruster_manager/input
+
+with the wrench command to the vehicle. The thrust forces will be generated at each thruster's unit frame like in the RViz screenshot below.
+
+
+roslaunch <ROBOT_NAME>_control start_thruster_manager.launch reset_tam:=true
+
+
+killall -9 gzserver gzclient
