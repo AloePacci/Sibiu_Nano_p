@@ -16,7 +16,7 @@ from sensors import Sensor
 
 #this class downloads gps data from Waterlinked
 class GPS_handler():
-    def __init__(self, url="https://demo.waterlinked.com", logger=None, antenna_position=None, depth = None):     
+    def __init__(self, url="http://192.168.7.1", logger=None, antenna_position=None, depth = None):     
         self.url=url
         if logger is None:
             self.log=Logger()
@@ -58,12 +58,15 @@ class GPS_handler():
         while not self.__close__:
             acoustic_position = self.get_acoustic_position()
             global_position = self.get_global_position()
-            self.depth = acoustic_position["z"]
-            self.x=acoustic_position['x']
-            self.y=acoustic_position['y']
-            self.lat=global_position['lat']
-            self.lon=global_position['lon']
-            self.hdop=global_position['hdop']
+            try:
+                self.depth = acoustic_position["z"]
+                self.x=acoustic_position['x']
+                self.y=acoustic_position['y']
+                self.lat=global_position['lat']
+                self.lon=global_position['lon']
+                self.hdop=global_position['hdop']
+            except:
+                print(acoustic_position)
             time.sleep(0.05) #limit refresh rate
         self.log.log("gps log closed")
 
@@ -200,7 +203,7 @@ class Message_sender(threading.Thread):
                     0, 0,  #time_usec, gps_id
                     0b11111100, #flag ingnore[vertical accuracy, hori acc, sped acc, vel vert, vel horiz, vdop, hdop, depth]
                     0,0, #time_week_ms, time_week,
-                    3, #0-1: no fix, 2: 2D fix, 3: 3D fix. 4: 3D with DGPS. 5: 3D with RTK
+                    5, #0-1: no fix, 2: 2D fix, 3: 3D fix. 4: 3D with DGPS. 5: 3D with RTK
                     int(self.gps.lat*1e7),
                     int(self.gps.lon*1e7),
                     self.gps.depth,
@@ -213,6 +216,7 @@ class Message_sender(threading.Thread):
                     )
                     self.vehicle.send_mavlink(msg)
             except:
+                print("gps problem")
                 pass
             time.sleep(0.1) #5hz is enough, we give more cause yolo
 

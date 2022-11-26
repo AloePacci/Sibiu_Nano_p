@@ -27,11 +27,11 @@ class Sibiu(threading.Thread):
 
     def test(self):
         self.log.print(f"performing test")
-        self.handler.setmode("ALT_HOLD")
+        self.handler.setmode("GUIDED")
         self.handler.arm()
         #self.vehicle.play_tune("AAAA")
         for i in range (100000):
-            #self.handler.goto_deep(1) 
+            self.handler.goto_deep(0) 
             self.handler.orientate(90)
             time.sleep(0.1)
         self.handler.disarm()
@@ -41,7 +41,7 @@ class Sibiu(threading.Thread):
 
 
     def run(self):
-        #self.test()
+        self.test()
         pass
 
     def get_id(self):

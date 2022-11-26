@@ -11,9 +11,10 @@ import numpy as np
 import pandas as pd
 import time
 
-data=pd.read_csv("./data/data 10.17.2022..12.37.csv",index_col=0)
+data=pd.read_csv("./data/data 10.17.2022..12.44.csv",index_col=0)
 data["mode"]=data["mode"].replace('MANUAL',1)
 data["mode"]=data["mode"].replace('ALT_HOLD',2)
+data["mode"]=data["mode"].replace('GUIDED',3)
 data["state"]=data["state"].replace('CRITICAL',1)
 data=data.groupby(data.index)
 data=data.mean()
@@ -25,8 +26,8 @@ for i in data:
     if i=="mode":
         datos=data[~data[i].isnull()][i]
         ax.plot(datos.index/1000, datos.values, color='tab:blue')
-        ax.yaxis.set_ticks([1,2])
-        ax.set_yticklabels(["MANUAL", "DEEP_HOLD"])
+        ax.yaxis.set_ticks([1,2,3])
+        ax.set_yticklabels(["MANUAL", "DEEP_HOLD", "GUIDED"])
     elif i=="state":
         datos=data[~data[i].isnull()][i]
         ax.plot(datos.index/1000, datos.values, color='tab:blue')
