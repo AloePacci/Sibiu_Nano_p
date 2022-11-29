@@ -1,0 +1,11 @@
+7150624:main.py 38, __init__ > main.py 12, main > main.py 81, <module> : Connection Success
+7150624:main.py 42, test > main.py 14, main > main.py 81, <module> : performing test
+7150624:send_messages.py 89, setmode > main.py 43, test > main.py 14, main > main.py 81, <module> : change mode to ALT_HOLD
+7150624:send_messages.py 81, arm > main.py 44, test > main.py 14, main > main.py 81, <module> : vehicle arm
+7151624:send_messages.py 46, goto_deep > main.py 47, test > main.py 14, main > main.py 81, <module> : asked to go to deep -5
+7152624:send_messages.py 46, goto_deep > main.py 47, test > main.py 14, main > main.py 81, <module> : asked to go to deep -5
+7153621:send_messages.py 46, goto_deep > main.py 47, test > main.py 14, main > main.py 81, <module> : asked to go to deep -5
+7154627:send_messages.py 46, goto_deep > main.py 47, test > main.py 14, main > main.py 81, <module> : asked to go to deep -5
+7155624:send_messages.py 46, goto_deep > main.py 47, test > main.py 14, main > main.py 81, <module> : asked to go to deep -5
+7156624:send_messages.py 85, disarm > main.py 49, test > main.py 14, main > main.py 81, <module> : vehicle disarm
+7156624:send_messages.py 89, setmode > main.py 50, test > main.py 14, main > main.py 81, <module> : change mode to MANUAL

@@ -1,0 +1,2 @@
+3628631:main.py 25, __init__ > main.py 12, main > main.py 67, <module> : Connection Success
+3628631:send_messages.py 45, goto_deep > main.py 14, main > main.py 67, <module> : asked to go to deep {deepness}

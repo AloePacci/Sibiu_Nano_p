@@ -1,0 +1,12 @@
+nan:communication.py 146, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 57, <module> : vehicle found, starting logging
+495591:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection Success
+495591:sibiu.py 29, test > sibiu.py 45, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+496588:communication.py 231, setmode > sibiu.py 30, test > sibiu.py 45, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL
+496588:communication.py 223, arm > sibiu.py 31, test > sibiu.py 45, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle arm
+500590:main.py 64, <module> : asked to finish program
+500590:sibiu.py 65, raise_exception > sibiu.py 70, close > main.py 48, close > main.py 65, <module> : sibiu closed
+500590:main.py 41, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : joy read stopped
+500590:communication.py 249, close > communication.py 240, safe_close > main.py 49, close > main.py 65, <module> : comm closed
+500590:main.py 51, close > main.py 65, <module> : close finished
+500590:logger.py 75, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed

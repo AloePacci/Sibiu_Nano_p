@@ -1,0 +1,13 @@
+nan:communication.py 146, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 57, <module> : vehicle found, starting logging
+1362296:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection Success
+1362695:sibiu.py 29, test > sibiu.py 45, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+1363091:communication.py 231, setmode > sibiu.py 30, test > sibiu.py 45, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL
+1363095:communication.py 223, arm > sibiu.py 31, test > sibiu.py 45, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle arm
+1374991:communication.py 75, get_data > communication.py 89, get_acoustic_position > communication.py 99, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : Exception occured HTTPConnectionPool(host='192.168.7.1', port=80): Max retries exceeded with url: /api/v1/position/acoustic/filtered (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000021FCF5F8520>: Failed to establish a new connection: [WinError 10060] Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder'))
+1375391:main.py 33, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to close program
+1375396:sibiu.py 65, raise_exception > sibiu.py 70, close > main.py 48, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : sibiu closed
+1375493:logger.py 75, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed
+1375591:communication.py 249, close > communication.py 240, safe_close > main.py 49, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : comm closed
+1375691:main.py 51, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : close finished
+1375896:main.py 41, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : joy read stopped

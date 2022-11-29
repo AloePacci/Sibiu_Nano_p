@@ -1,0 +1,11 @@
+nan:communication.py 100, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 57, <module> : vehicle found, starting logging
+2977313:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection Success
+2982326:main.py 64, <module> : asked to finish program
+2982326:sibiu.py 64, raise_exception > sibiu.py 69, close > main.py 48, close > main.py 65, <module> : sibiu closed
+2982326:communication.py 173, close > communication.py 164, safe_close > main.py 49, close > main.py 65, <module> : comm closed
+2982326:main.py 51, close > main.py 65, <module> : close finished
+2982326:communication.py 68, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : gps log closed
+2983314:logger.py 75, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed
+nan:communication.py 100, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 57, <module> : vehicle found, starting logging

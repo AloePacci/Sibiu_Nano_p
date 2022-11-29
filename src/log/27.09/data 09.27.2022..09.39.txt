@@ -1,0 +1,13 @@
+nan:communication.py 32, __init__ > sibiu.py 17, __init__ > main.py 17, __init__ > main.py 57, <module> : Connection SUCCESS
+nan:logger.py 43, append_vehicle > sibiu.py 18, __init__ > main.py 17, __init__ > main.py 57, <module> : vehicle found, starting logging
+3780679:sibiu.py 20, __init__ > main.py 17, __init__ > main.py 57, <module> : Connection Success
+3780681:sibiu.py 29, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+3780681:communication.py 80, setmode > sibiu.py 30, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to ALT_HOLD
+3781674:communication.py 72, arm > sibiu.py 31, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle arm
+3782675:communication.py 37, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 0
+3783680:main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to close program
+3783682:sibiu.py 62, raise_exception > sibiu.py 67, close > main.py 49, close > main.py 35, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : sibiu closed
+3783682:logger.py 84, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed
+3783682:main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to close program
+3783682:sibiu.py 62, raise_exception > sibiu.py 67, close > main.py 49, close > main.py 35, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : sibiu closed
+3783682:main.py 42, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : joy read stopped

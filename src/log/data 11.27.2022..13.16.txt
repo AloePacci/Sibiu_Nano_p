@@ -1,0 +1,26 @@
+nan:communication.py 146, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 57, <module> : vehicle found, starting logging
+6109653:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection Success
+6109653:sibiu.py 29, test > sibiu.py 46, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+6110648:communication.py 233, setmode > sibiu.py 30, test > sibiu.py 46, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL
+6110653:communication.py 225, arm > sibiu.py 32, test > sibiu.py 46, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle arm
+6120153:main.py 64, <module> : asked to finish program
+6120398:main.py 41, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : joy read stopped
+6120398:sibiu.py 66, raise_exception > sibiu.py 73, close > main.py 48, close > main.py 65, <module> : sibiu closed
+6120648:communication.py 251, close > communication.py 242, safe_close > main.py 49, close > main.py 65, <module> : comm closed
+6122648:logger.py 75, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed
+6124821:communication.py 75, get_data > communication.py 89, get_acoustic_position > communication.py 99, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : Exception occured HTTPConnectionPool(host='192.168.7.1', port=80): Max retries exceeded with url: /api/v1/position/acoustic/filtered (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020732507F10>: Failed to establish a new connection: [WinError 10060] Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder'))
+nan:communication.py 146, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 57, <module> : vehicle found, starting logging
+6143695:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection Success
+6143695:sibiu.py 29, test > sibiu.py 46, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+6143695:communication.py 233, setmode > sibiu.py 30, test > sibiu.py 46, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL
+6144693:communication.py 225, arm > sibiu.py 32, test > sibiu.py 46, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle arm
+6153450:communication.py 75, get_data > communication.py 89, get_acoustic_position > communication.py 99, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : Exception occured HTTPConnectionPool(host='192.168.7.1', port=80): Max retries exceeded with url: /api/v1/position/acoustic/filtered (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000026160BB9520>: Failed to establish a new connection: [WinError 10060] Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder'))
+6153950:main.py 64, <module> : asked to finish program
+6154050:sibiu.py 66, raise_exception > sibiu.py 73, close > main.py 48, close > main.py 65, <module> : sibiu closed
+6154050:main.py 41, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : joy read stopped
+6154250:communication.py 251, close > communication.py 242, safe_close > main.py 49, close > main.py 65, <module> : comm closed
+6156255:logger.py 75, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed
+6177350:communication.py 75, get_data > communication.py 92, get_global_position > communication.py 100, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : Exception occured HTTPConnectionPool(host='192.168.7.1', port=80): Max retries exceeded with url: /api/v1/position/global (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000026161F17070>: Failed to establish a new connection: [WinError 10060] Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder'))
+6177455:communication.py 114, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : gps log closed

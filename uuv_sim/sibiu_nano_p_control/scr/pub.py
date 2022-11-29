@@ -51,8 +51,8 @@ class graficas:
         self.rate.sleep()
         aux.linear.x=self.lista_h[0][0]
         aux.linear.y=self.lista_h[1][0]
-        aux.linear.z=self.lista_a[0]*degree_to_rad
-        aux.angular.z=self.lista_angles[2][0]
+        aux.linear.z=self.lista_a[0]
+        aux.angular.z=self.lista_angles[2][0]*degree_to_rad
         self.reference=[aux]
     
     def tiempo(self):# this function returns time since program started runing
@@ -141,6 +141,7 @@ class graficas:
         ref_list.append(ref_list[len(ref_list)-1])
 
         ax2.plot(self.lista_a_t, self.lista_a, color='tab:blue', label='altura')
+        ax2.plot(self.reference_t, ref_list, linestyle='dashed', color='tab:red', label='referencia')
         ax2.set(xlabel='time', ylabel='altura (m)')
         ax2.grid(True)
         ax2.legend()
@@ -158,6 +159,7 @@ class graficas:
         ax3.plot(self.lista_angles_t, self.lista_angles[0], color='tab:blue', label='roll')
         ax3.plot(self.lista_angles_t, self.lista_angles[1], color='tab:orange',label='pitch')
         ax3.plot(self.lista_angles_t, self.lista_angles[2], color='tab:green',label='yaw')
+        ax3.plot(self.reference_t, ref_list, linestyle='dashed', color='tab:red', label='referencia')
         ax3.set(xlabel='time')
         ax3.grid(True)
         ax3.legend()
@@ -174,6 +176,7 @@ class graficas:
         fig4=plt.figure(4)
         ax4 = fig4.add_subplot(1, 1, 1)
         ax4.plot(self.lista_h[0], self.lista_h[1], color='tab:blue', label='position')
+        ax4.scatter(ref_list[0], ref_list[1], linestyle='dashed', color='tab:red', label='referencia')
         ax4.set(xlabel='x', ylabel='y', title='position')
         ax4.grid(True)
 

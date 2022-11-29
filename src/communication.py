@@ -2,6 +2,7 @@ from dronekit import connect, VehicleMode, LocationGlobal
 import pymavlink
 import numpy as np
 import math
+from math import sqrt, pow, atan2
 import traceback
 import json
 import requests
@@ -13,6 +14,45 @@ import time
 from logger import Logger
 import threading
 from sensors import Sensor
+
+
+#we define a simple PID
+class pid:
+    def __init__(self, kp, ki, kd, sat):
+        self.kp=kp
+        self.ki=ki
+        self.kd=kd
+        self.dererr=0.0
+        self.interr=0.0
+        self.sat=sat
+
+    def derivative(self, error):
+        a=self.dererr
+        self.dererr=error
+        return self.kd*(error-a)
+
+    def integral(self, error):
+        if self.sat==0 or (abs(self.proportional(error)+self.interr * self.ki)<self.sat):
+            self.interr+=error
+        return self.interr * self.ki
+
+    def proportional(self, error):
+        return error*self.kp
+
+    def PD(self, error):
+        return self.proportional(error)+self.derivative(error)
+    
+    def PI(self, error):
+        return self.proportional(error)+self.integral(error)
+
+    def PID(self, error):
+        output=self.proportional(error)+self.integral(error)+self.derivative(error)
+        if abs(output)<self.sat:
+            return int(output)
+        if output>self.sat:
+            return self.sat
+        return -self.sat
+
 
 #this class downloads gps data from Waterlinked
 class GPS_handler():
@@ -59,14 +99,17 @@ class GPS_handler():
             acoustic_position = self.get_acoustic_position()
             global_position = self.get_global_position()
             try:
-                self.depth = acoustic_position["z"]
-                self.x=acoustic_position['x']
-                self.y=acoustic_position['y']
-                self.lat=global_position['lat']
-                self.lon=global_position['lon']
-                self.hdop=global_position['hdop']
+                    #if acoustic_position["position_valid"]==True:
+                    self.depth = acoustic_position["z"]
+                    self.x=acoustic_position['x']
+                    self.y=acoustic_position['y']
+                    self.lat=global_position['lat']
+                    self.lon=global_position['lon']
+                    self.hdop=global_position['hdop']
+                    #else:
+                    #   print(f"invalid_pos {[acoustic_position['x'], acoustic_position['y']]}")
             except:
-                print(acoustic_position)
+                pass
             time.sleep(0.05) #limit refresh rate
         self.log.log("gps log closed")
 
@@ -84,13 +127,15 @@ class Message_sender(threading.Thread):
         if connection fails, it will log and notice reason of fail, killing the program
     """
 
-    def __init__(self, logger=None, ip="192.168.2.1", port="8003", timeout=6.0, source_system=1, source_component=1):     
+    def __init__(self, logger=None, ip="192.168.2.1", port="8002", timeout=6.0, source_system=255):     
         if logger is None:
             self.log=Logger()
         else:
             self.log=logger  
         try:
-            self.vehicle = connect(ip+":"+port,wait_ready=False, baud=115200, timeout=timeout, source_system=source_system, source_component=source_component)
+            self.vehicle = connect(ip+":"+port,wait_ready=False, baud=115200, timeout=timeout, source_system=source_system)
+            self.vehicle_order = connect(ip+":"+"8003",wait_ready=False, baud=115200, timeout=timeout, source_system=source_system)
+
         except ConnectionRefusedError:
             self.log.error("Connection to submarine was refused")
         except OSError:
@@ -108,7 +153,19 @@ class Message_sender(threading.Thread):
 
         self.gps_thread=threading.Thread(target=self.send_GPS_Mavlink)
         self.gps_thread.start()
+        self.override([0,0,0,0,0,0])
+        self.control_thread=threading.Thread(target=self.send_override_Mavlink)
+        self.control_thread.start()
 
+        #instanciate PID
+        self.x_axis=pid(100, 0.01, 5, 500)
+        self.y_axis=pid(100, 0.01, 5, 500) 
+        self.z_axis=pid(150, 1, 60, 500) 
+        self.roll_axis=pid(100, 0, 400, 500)
+        self.pitch_axis=pid(100, 0, 400, 500) 
+        self.yaw_axis=pid(0.8, 0.02 , 0.1, 200)
+
+        self.last=[]
 
 
     def goto_deep(self, deepness):
@@ -125,7 +182,7 @@ class Message_sender(threading.Thread):
             0,0,0, #ax,ay,az
             0,  # yaw
             0)  # yaw rate
-        self.vehicle.send_mavlink(msg)
+        self.vehicle_order.send_mavlink(msg)
 
     def orientate(self, desired_yaw):
         #self.log.log("asked to rotate {desired_yaw}")
@@ -135,7 +192,7 @@ class Message_sender(threading.Thread):
             QuaternionBase([math.radians(angle) for angle in (0,0,desired_yaw)]), #quaternion
             0,0,0,0)  # roll rate, pitch rate, yaw rate, thrust
         # send command to vehicle
-        self.vehicle.send_mavlink(msg)
+        self.vehicle_order.send_mavlink(msg)
 
     def conditional_yaw(self, heading, relative=False):
         if relative:
@@ -143,7 +200,7 @@ class Message_sender(threading.Thread):
         else:
             is_relative = 0  # yaw is an absolute angle
         # create the CONDITION_YAW command using command_long_encode()
-        msg = self.vehicle.message_factory.command_long_encode(
+        msg = self.vehicle_order.message_factory.command_long_encode(
             0, 0,  # target system, target component
             pymavlink.mavutil.mavlink.MAV_CMD_CONDITION_YAW,  # command
             0,  # confirmation
@@ -153,7 +210,15 @@ class Message_sender(threading.Thread):
             is_relative,  # param 4, relative offset 1, absolute angle 0
             0, 0, 0)  # param 5 ~ 7 not used
         # send command to vehicle
-        self.vehicle.send_mavlink(msg)
+        self.vehicle_order.send_mavlink(msg)
+
+    def override(self, values):
+        self.values=values
+    
+    def send_override_Mavlink(self):
+        while not self.__stop__:
+            self.vehicle_order.channels.overrides = {'5':1500+self.values[0], '6':1500+self.values[1], '3':1500+self.values[2], '2':1500+self.values[3], '1':1500+self.values[4], '4':1500+self.values[5]}
+            time.sleep(0.1)
 
 
     def play_tune(self, tune):
@@ -163,36 +228,38 @@ class Message_sender(threading.Thread):
         bytes('', 'utf-8'), #format
         bytes('', 'utf-8') #tune
         )
-        self.vehicle.send_mavlink(msg)
+        self.vehicle_order.send_mavlink(msg)
 
     def arm(self):
         self.log.log("vehicle arm")
-        self.vehicle.arm()
+        self.vehicle_order.arm()
 
     def disarm(self):
         self.log.log("vehicle disarm")
-        self.vehicle.disarm()    
+        self.vehicle_order.disarm()    
 
     def setmode(self, mode):
         self.log.log(f"mode changed to {mode}")
-        self.vehicle.mode = VehicleMode(mode)
+        self.vehicle_order.mode = VehicleMode(mode)
 
     def get_vehicle(self):
         return self.vehicle
 
     def safe_close(self):
-        self.vehicle.mode = VehicleMode("MANUAL")
-        self.vehicle.arm()
+        self.vehicle_order.mode = VehicleMode("MANUAL")
+        self.vehicle_order.arm()
         self.close()
 
     def emergency_close(self):
-        self.vehicle.disarm()
-        self.vehicle.mode = VehicleMode("MANUAL")
+        self.vehicle_order.disarm()
+        self.vehicle_order.mode = VehicleMode("MANUAL")
         self.close()
 
     def close(self):
         self.gps.close()
         self.log.log("comm closed")
+        self.vehicle.close()
+        self.vehicle_order.close()
         self.__stop__=True
 
     def send_GPS_Mavlink(self):
@@ -214,9 +281,9 @@ class Message_sender(threading.Thread):
                     9, #satellites_visible, min value 4. actual value 3 from antenna
                     0, #yaw not available
                     )
-                    self.vehicle.send_mavlink(msg)
+                    self.vehicle_order.send_mavlink(msg)
             except:
-                print("gps problem")
+                #print("gps problem")
                 pass
             time.sleep(0.1) #5hz is enough, we give more cause yolo
 
@@ -252,14 +319,14 @@ class Message_sender(threading.Thread):
             return
         self.log.print(f"asked to go to {[lat, lon]}, distance {self.calculate_distance(lat,lon)}")
         #put vehicle in guided mode and ask to go to point
-        self.vehicle.mode = VehicleMode("GUIDED")
+        self.vehicle_order.mode = VehicleMode("GUIDED")
         time.sleep(1) #wait for mode to change
-        self.vehicle.simple_goto(LocationGlobal(lat, lon, -abs(depth)))
+        self.vehicle_order.simple_goto(LocationGlobal(lat, lon, -abs(depth)))
         while self.calculate_distance(lat,lon)>1.5 and (depth-self.vehicle.location.global_relative_frame.alt)>1.5: #while we have not reached the point
             #check system is able to go to point
             if not self.vehicle.ekf_ok:
                 self.log.print("ekf failed")
-                self.vehicle.mode = VehicleMode("ALT_HOLD") #maintain position
+                self.vehicle_order.mode = VehicleMode("ALT_HOLD") #maintain position
                 ekf_failed=True
                 if ekf_counter%30 == 0: #log each 3 secs
                     self.log.log(f"System Status: \nmode {self.vehicle.mode.name}, GPS_status: {self.vehicle.gps_0}, System status: {self.vehicle.system_status.state}, System able to arm {self.vehicle.is_armable} ")
@@ -271,19 +338,69 @@ class Message_sender(threading.Thread):
                 self.log.log(f"System Status: mode {self.vehicle.mode.name}, GPS_status: {self.vehicle.gps_0}, System status: {self.vehicle.system_status.state}, System able to arm {self.vehicle.is_armable} ")
                 ekf_failed=False #reset flag
                 ekf_counter=0
-                self.vehicle.arm() #arm to avoid inconsistent state
-                self.vehicle.mode = VehicleMode("GUIDED") #restore mode
-                self.vehicle.simple_goto(LocationGlobal(lat, lon, -abs(depth))) #restore point
+                self.vehicle_order.arm() #arm to avoid inconsistent state
+                self.vehicle_order.mode = VehicleMode("GUIDED") #restore mode
+                self.vehicle_order.simple_goto(LocationGlobal(lat, lon, -abs(depth))) #restore point
             if travelling_counter%30 == 0: #each 3 seconds
                 self.log.print(f"distance [{self.calculate_distance(lat,lon)},{(depth-self.vehicle.location.global_relative_frame.alt)}]")
             
             travelling_counter+=1
             time.sleep(0.1)
         # after reaching samplepoint
-        self.vehicle.mode = VehicleMode("ALT_HOLD")
+        self.vehicle_order.mode = VehicleMode("ALT_HOLD")
         self.sensor.take_sample()
 
+    def external_goto_iteration(self, x,y,z,heading):
+        try:
+            errorx=x-self.gps.x
+            errory=y-self.gps.y
+        except:
+            errorx=0
+            errory=0
+        errorz=z-self.vehicle.location.global_frame.alt
+        if self.last==[errorx,errory,errorz,self.vehicle.attitude.roll,self.vehicle.attitude.pitch,self.vehicle.heading]:
+            return
+        else:
+            self.last=[errorx,errory,errorz,self.vehicle.attitude.roll,self.vehicle.attitude.pitch,self.vehicle.heading]
+        
+        #for heading
+        #force simetry
+        vehicleheading=self.vehicle.heading
+        if vehicleheading>180:
+            vehicleheading=360-vehicleheading
+        if abs(heading-vehicleheading) > 180: #we choose the shortest path
+                    if heading>0:
+                        heading-=360
+                    else:
+                        heading+=360
+        rolsignal=self.roll_axis.PID(-self.vehicle.attitude.roll)
+        pitchsignal=self.pitch_axis.PID(self.vehicle.attitude.pitch)
+        yawsignal=self.yaw_axis.PID(heading-vehicleheading)
+        #print([1500+self.roll_axis.PID(self.vehicle.attitude.roll),1500+self.pitch_axis.PID(-self.vehicle.attitude.pitch)])
+        #print([[self.vehicle.attitude.roll,self.vehicle.attitude.pitch], [rolsignal, pitchsignal]])
+        #self.override([self.roll_axis.PID(self.vehicle.attitude.roll),1500+self.pitch_axis.PID(-self.vehicle.attitude.pitch), 1500])
+        #self.override([0,0,50,0,0,yawsignal])
+        angulo_ataque=self.vehicle.heading
+        distance=sqrt(pow(errorx,2)+pow(errory,2))
+        xvalue=int(self.x_axis.PID(distance)*math.sin(angulo_ataque))
+        yvalue=int(self.y_axis.PID(distance)*math.cos(angulo_ataque))
+        zvalue=self.z_axis.PID(errorz)
+        self.override([0,0,zvalue,0,0,0])
+        print([errorz,zvalue])
+        #print([[heading, vehicleheading], [yawsignal]])
 
+        """
+        angulo_ataque=atan2(errory,errorx)-self.vehicle.heading
+        distance=sqrt(pow(self.reference.linear.x-self.pose.x,2)+pow(self.reference.linear.y-self.pose.y,2))
+        self.signal.force.x=self.x_axis.PID(distance)*sin(angulo_ataque)
+        self.signal.force.y=self.y_axis.PID(distance)*cos(angulo_ataque)
+        self.yaw_axis.PID(heading-self.vehicle.heading)
+        self.z_axis.PID(self.reference.linear.z-self.deepness)
+        """
+
+    def set_sys_id(self, id):
+        pass
+        #self.vehicle_order.parameters['SYSID_MYGCS']=id
 
 if __name__ == '__main__':
     endopoint=Message_sender()

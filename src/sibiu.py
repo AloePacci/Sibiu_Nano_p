@@ -15,7 +15,8 @@ class Sibiu(threading.Thread):
             self.log=log #restore log
 
         self.handler=Message_sender(logger=self.log) #instatiate communication handler
-        self.log.append_vehicle(self.handler.get_vehicle()) #start logging vehicle data
+        time.sleep(1)
+        self.log.append_vehicle(self.handler, outside=True) #start logging vehicle data
         self.log.wait_till_init() #wait for things to init
         self.log.log("Connection Success")
 
@@ -27,13 +28,15 @@ class Sibiu(threading.Thread):
 
     def test(self):
         self.log.print(f"performing test")
-        self.handler.setmode("GUIDED")
+        self.handler.setmode("STABILIZE")
+        self.handler.set_sys_id(1)
         self.handler.arm()
         #self.vehicle.play_tune("AAAA")
-        for i in range (100000):
-            self.handler.goto_deep(0) 
-            self.handler.orientate(90)
-            time.sleep(0.1)
+        for i in range (1000000):
+            #self.handler.goto_deep(0) 
+            #self.handler.orientate(90)
+            self.handler.external_goto_iteration(0,2,0.5,90)
+            time.sleep(0.05)
         self.handler.disarm()
         self.handler.setmode("MANUAL")
         time.sleep(2)
@@ -61,7 +64,9 @@ class Sibiu(threading.Thread):
             ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 0)
             self.log.error('Exception raise failure')
         else:
-            self.log.log("sibiu closed")
+            self.log.print("sibiu closed")
+            self.handler.override([0,0,0,0,0,0])
+            self.handler.set_sys_id(255)
         
 
 

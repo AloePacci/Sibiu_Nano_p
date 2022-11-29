@@ -1,0 +1,18 @@
+nan:communication.py 45, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 56, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 56, <module> : vehicle found, starting logging
+777676:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 56, <module> : Connection Success
+777676:sibiu.py 29, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+777676:communication.py 94, setmode > sibiu.py 30, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to ALT_HOLD
+778678:communication.py 86, arm > sibiu.py 31, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle arm
+778678:communication.py 51, goto_deep > sibiu.py 33, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+779674:logger.py 88, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to ALT_HOLD
+786774:communication.py 90, disarm > sibiu.py 35, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle disarm
+790574:communication.py 94, setmode > sibiu.py 36, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL
+790574:logger.py 86, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle was disarmed
+792174:sibiu.py 38, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : test finished
+793174:main.py 63, <module> : asked to finish program
+793174:sibiu.py 61, raise_exception > sibiu.py 66, close > main.py 48, close > main.py 64, <module> : sibiu closed
+793174:main.py 41, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : joy read stopped
+794574:logger.py 75, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed
+808574:logger.py 88, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL
+814574:logger.py 86, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle was armed

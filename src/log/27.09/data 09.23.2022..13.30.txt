@@ -1,0 +1,4 @@
+7093689:main.py 35, __init__ > main.py 12, main > main.py 78, <module> : Connection Success
+7093689:main.py 39, test > main.py 13, main > main.py 78, <module> : performing test
+7093689:send_messages.py 89, setmode > main.py 40, test > main.py 13, main > main.py 78, <module> : change mode to ALT_HOLD
+7093689:send_messages.py 81, arm > main.py 41, test > main.py 13, main > main.py 78, <module> : vehicle arm

@@ -1,0 +1,52 @@
+nan:communication.py 45, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 56, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 56, <module> : vehicle found, starting logging
+996651:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 56, <module> : Connection Success
+996651:sibiu.py 29, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+997651:communication.py 94, setmode > sibiu.py 30, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to ALT_HOLD
+997651:communication.py 86, arm > sibiu.py 31, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle arm
+997651:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+997651:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+998646:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+998646:logger.py 88, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to ALT_HOLD
+999651:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+999651:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1000651:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1001649:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1002656:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1003652:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1004901:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1006146:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1006896:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1007651:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1008649:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1009901:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1010662:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1011062:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1011461:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1011765:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1013461:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1014161:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1014761:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1015362:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1015961:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1016461:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1016966:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1017461:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1017666:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1017961:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1018261:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1018465:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1018761:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1018961:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1019961:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1020961:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1021261:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1021566:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1021961:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1022261:communication.py 51, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 1
+1022761:main.py 63, <module> : asked to finish program
+1022761:sibiu.py 62, raise_exception > sibiu.py 67, close > main.py 48, close > main.py 64, <module> : sibiu closed
+1022761:main.py 41, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : joy read stopped
+1023161:logger.py 75, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed
+1086261:logger.py 88, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL
+1093661:logger.py 86, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle was disarmed

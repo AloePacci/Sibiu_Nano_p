@@ -1,0 +1,9 @@
+nan:communication.py 32, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 53, <module> : Connection SUCCESS
+nan:logger.py 43, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 53, <module> : vehicle found, starting logging
+3222637:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 53, <module> : Connection Success
+3222637:sibiu.py 29, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+3222637:communication.py 80, setmode > sibiu.py 30, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to ALT_HOLD
+3223627:communication.py 37, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 0
+3223632:main.py 60, <module> : asked to finish program
+3224636:sibiu.py 62, raise_exception > sibiu.py 67, close > main.py 48, close > main.py 61, <module> : sibiu closed
+3224636:logger.py 84, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed

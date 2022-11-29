@@ -1,0 +1,16 @@
+nan:communication.py 32, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 52, <module> : Connection SUCCESS
+nan:logger.py 43, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 52, <module> : vehicle found, starting logging
+3353713:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 52, <module> : Connection Success
+3353713:sibiu.py 29, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+3354706:communication.py 80, setmode > sibiu.py 30, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to ALT_HOLD
+3354706:communication.py 37, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 0
+3355401:communication.py 37, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep -1
+3356605:logger.py 84, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed
+3357001:communication.py 37, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep -2
+3358601:communication.py 37, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep -3
+3359801:communication.py 37, goto_deep > sibiu.py 34, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep -4
+3360601:communication.py 76, disarm > sibiu.py 36, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle disarm
+3360608:communication.py 80, setmode > sibiu.py 37, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL
+3362208:sibiu.py 39, test > sibiu.py 43, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : test finished
+3403001:main.py 59, <module> : asked to finish program
+3479108:sibiu.py 62, raise_exception > sibiu.py 67, close > main.py 47, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : sibiu closed

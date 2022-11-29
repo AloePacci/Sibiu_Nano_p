@@ -1,0 +1,13 @@
+nan:communication.py 103, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 57, <module> : vehicle found, starting logging
+1385651:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection Success
+1385651:sibiu.py 29, test > sibiu.py 44, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+1386646:communication.py 177, setmode > sibiu.py 30, test > sibiu.py 44, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to GUIDED
+1386651:communication.py 169, arm > sibiu.py 31, test > sibiu.py 44, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle arm
+1438587:logger.py 88, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to ACRO
+1462725:logger.py 88, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to ALT_HOLD
+1474929:logger.py 88, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL
+1488899:logger.py 86, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle was disarmed
+1652897:main.py 33, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to close program
+1654495:sibiu.py 64, raise_exception > sibiu.py 69, close > main.py 48, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : sibiu closed
+1655095:logger.py 75, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed

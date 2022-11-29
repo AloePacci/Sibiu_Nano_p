@@ -30,35 +30,56 @@ class Logger:
             self.append_vehicle(vehiculo)
 
 
-    def append_vehicle(self, vehicle):
+    def append_vehicle(self, vehicle, outside=False):
         self.log("vehicle found, starting logging")
-        self.vehicle=vehicle
-        #listener for messages
-        self.vehicle.add_message_listener('SCALED_PRESSURE2', self.pressure_read)
-        self.vehicle.add_message_listener('ATTITUDE', self.attitude_read)
-        self.vehicle.add_message_listener('SYS_STATUS', self.sys_read)
-        self.vehicle.add_message_listener('POWER_STATUS', self.power_read)
-        self.vehicle.add_message_listener('NAV_CONTROLLER_OUTPUT', self.nav_read)
-        self.vehicle.add_message_listener('VFR_HUD', self.vfr_read)
-        self.vehicle.add_message_listener('SERVO_OUTPUT_RAW', self.servo_read)
-        self.vehicle.add_message_listener('RC_CHANNELS_RAW', self.rc_read)
-        self.vehicle.add_message_listener('SCALED_IMU2', self.imu_read)
-        self.vehicle.add_message_listener('GLOBAL_POSITION_INT', self.pos_read)
-        self.vehicle.add_message_listener('EKF_STATUS_REPORT', self.ekf_read)
-        self.vehicle.add_message_listener('BATTERY_STATUS', self.battery_read)
-        #download vehicle params
-        self.cmds = self.vehicle.commands
-        self.cmds.download()
-        self.cmds.wait_ready()
-        self.home = self.vehicle.home_location
+        self.vehicle=vehicle.vehicle
+        self.gps_handler=vehicle.gps
+        
+        if outside:#listener for messages
+            self.external_save_thread=threading.Thread(target=self.external_save)
+            self.external_save_thread.start()
+
+
+        else:
+            self.vehicle.add_message_listener('SCALED_PRESSURE2', self.pressure_read)
+            self.vehicle.add_message_listener('ATTITUDE', self.attitude_read)
+            self.vehicle.add_message_listener('SYS_STATUS', self.sys_read)
+            self.vehicle.add_message_listener('POWER_STATUS', self.power_read)
+            self.vehicle.add_message_listener('NAV_CONTROLLER_OUTPUT', self.nav_read)
+            self.vehicle.add_message_listener('VFR_HUD', self.vfr_read)
+            self.vehicle.add_message_listener('SERVO_OUTPUT_RAW', self.servo_read)
+            #self.vehicle.add_message_listener('RC_CHANNELS_RAW', self.rc_read)
+            #self.vehicle.add_message_listener('SCALED_IMU2', self.imu_read)
+            self.vehicle.add_message_listener('GLOBAL_POSITION_INT', self.pos_read)
+            #self.vehicle.add_message_listener('EKF_STATUS_REPORT', self.ekf_read)
+            self.vehicle.add_message_listener('BATTERY_STATUS', self.battery_read)
+            #download vehicle params
+            self.cmds = self.vehicle.commands
+            self.cmds.download()
+            self.cmds.wait_ready()
+            self.home = self.vehicle.home_location
     
-
         #create thread to save data into file
-
         self.save_thread=threading.Thread(target=self.save_data)
         self.save_thread.start()
 
+    def external_save(self):
+        try:
+            x=self.gps_handler.x
+            y=self.gps_handler.y
+        except:
+            x=0
+            y=0
+        last=[self.vehicle.attitude.roll, self.vehicle.attitude.roll, self.vehicle.heading, self.vehicle.location.global_frame.alt, x]
+        while not self.__stop:
+            if last!=[self.vehicle.attitude.roll, self.vehicle.attitude.roll, self.vehicle.heading, self.vehicle.location.global_frame.alt,x]:
+                last=[self.vehicle.attitude.roll, self.vehicle.attitude.roll, self.vehicle.heading, self.vehicle.location.global_frame.alt,x]
+                a=datetime.now()
+                timestamp=a.second+a.minute*60+a.microsecond/1000000
+                self.data=pd.concat([self.data, pd.DataFrame([self.vehicle.attitude.roll, self.vehicle.attitude.roll, self.vehicle.heading, self.vehicle.location.global_frame.alt, x, y],columns=[timestamp]  ,index=["roll","pitch","heading","alt","lat","lon"]).T], sort=True)
+                time.sleep(0.01)
 
+        
     def save_data(self): 
         print("starting log")
         while not self.__stop:
@@ -72,7 +93,7 @@ class Logger:
                 self.data=pd.DataFrame(index=[self.data.index.max()],columns=["pressure","differential_pressure","pressure_temperature","roll","pitch","yaw","rollspeed","pitchspeed","yawspeed","armed","ekf","state","heading","mode","Vcc","nav_roll","nav_pitch","nav_bearing","wp_dist","alt_error","airspeed","groundspeed","throttle","alt","climb","servo1","servo2","servo3","servo4","servo5","servo6","servo7","servo8","rc1","rc2","rc3","rc4","rc5","rc6","rc7","rc8","xacc","yacc","zacc","xgyro","ygyro","zgyro","xmag","ymag","zmag","lat","lon","altgps"])
             time.sleep(1)
         self.data.to_csv("./data/"+self.filename+".csv",mode="a", header=False) #update file last data
-        self.log("log save thread closed")
+        self.print("log save thread closed")
 
 
     def pressure_read(self,vehicle, name, msg):

@@ -1,11 +1,14 @@
 import paho.mqtt.client as mqtt
 import threading
 import json
+import time
 
 class Sensor():
     def __init__(self, name="Sibiu", addr='127.0.0.1', port=1883, timeout=60, topics2suscribe="sensor"):
         self.client = mqtt.Client(name)
         self.topics2suscribe=topics2suscribe
+        self.ph=None
+        self.temperature=None
         self._mqtt_thread = threading.Thread(target=self.mqtt_thread, args=(addr, port, timeout,))
         self._mqtt_thread.start()
     
@@ -28,6 +31,10 @@ class Sensor():
         message = json.loads(msg.payload.decode('utf-8'))  # Decode the msg into UTF-8
         if "ph" in message:
             print(f"ph is {message['ph']}")
+            self.ph=message['ph']
+        if "ph" in message:
+            print(f"ph is {message['ph']}")
+            self.ph=message['ph']
         else:
             print(f"unknown message {message}")
 

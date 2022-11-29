@@ -1,0 +1,16 @@
+nan:communication.py 146, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 57, <module> : vehicle found, starting logging
+2903568:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection Success
+2903568:sibiu.py 29, test > sibiu.py 46, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+2904568:communication.py 231, setmode > sibiu.py 30, test > sibiu.py 46, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL
+2904568:communication.py 223, arm > sibiu.py 32, test > sibiu.py 46, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle arm
+2907568:main.py 33, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to close program
+2907568:sibiu.py 66, raise_exception > sibiu.py 73, close > main.py 48, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : sibiu closed
+2907568:communication.py 249, close > communication.py 240, safe_close > main.py 49, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : comm closed
+2907568:main.py 51, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : close finished
+2907568:logger.py 75, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed
+2907568:main.py 33, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to close program
+2907568:sibiu.py 66, raise_exception > sibiu.py 73, close > main.py 48, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : sibiu closed
+2907568:communication.py 249, close > communication.py 240, safe_close > main.py 49, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : comm closed
+2907568:main.py 51, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : close finished
+2907568:main.py 41, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : joy read stopped

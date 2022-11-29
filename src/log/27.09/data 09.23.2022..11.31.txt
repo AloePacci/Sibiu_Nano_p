@@ -1,0 +1,2 @@
+nan:logger.py 165, <module> : hola
+4685185:main.py 24, test > main.py 19, __init__ > main.py 56, <module> : performing test

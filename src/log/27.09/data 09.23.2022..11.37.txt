@@ -1,0 +1,3 @@
+nan:main.py 25, test > main.py 20, __init__ > main.py 65, <module> : performing test
+nan:main.py 28, test > main.py 20, __init__ > main.py 65, <module> : armed
+295634:main.py 34, test > main.py 20, __init__ > main.py 65, <module> : disarmed

@@ -1,0 +1,13 @@
+nan:communication.py 148, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 19, __init__ > main.py 16, __init__ > main.py 57, <module> : vehicle found, starting logging
+30.710815:sibiu.py 21, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection Success
+31.103347:sibiu.py 30, test > sibiu.py 47, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+32.28476:communication.py 242, setmode > sibiu.py 31, test > sibiu.py 47, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL
+32.865529:communication.py 234, arm > sibiu.py 33, test > sibiu.py 47, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle arm
+58.001703:main.py 33, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to close program
+58.060702:sibiu.py 67, raise_exception > sibiu.py 74, close > main.py 48, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : sibiu closed
+58.060702:communication.py 260, close > communication.py 251, safe_close > main.py 49, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : comm closed
+58.060702:communication.py 114, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : gps log closed
+58.060702:logger.py 90, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed
+58.060702:main.py 51, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : close finished
+58.060702:main.py 41, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : joy read stopped

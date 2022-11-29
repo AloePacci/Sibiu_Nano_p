@@ -1,0 +1,12 @@
+nan:communication.py 32, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 50, <module> : Connection SUCCESS
+nan:logger.py 43, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 50, <module> : vehicle found, starting logging
+2702725:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 50, <module> : Connection Success
+2702725:sibiu.py 29, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+2702725:communication.py 80, setmode > sibiu.py 30, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to ALT_HOLD
+2703719:communication.py 37, goto_deep > sibiu.py 34, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep 0
+2704724:communication.py 37, goto_deep > sibiu.py 34, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep -1
+2705723:communication.py 37, goto_deep > sibiu.py 34, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep -2
+2707716:communication.py 37, goto_deep > sibiu.py 34, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep -3
+2708716:communication.py 37, goto_deep > sibiu.py 34, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to go to deep -4
+2708720:communication.py 76, disarm > sibiu.py 36, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle disarm
+2709943:communication.py 80, setmode > sibiu.py 37, test > sibiu.py 42, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL

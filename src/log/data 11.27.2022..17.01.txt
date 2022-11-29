@@ -1,0 +1,20 @@
+nan:communication.py 148, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 19, __init__ > main.py 16, __init__ > main.py 57, <module> : vehicle found, starting logging
+69.58293:sibiu.py 21, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection Success
+69.58293:sibiu.py 30, test > sibiu.py 47, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+70.49293:communication.py 242, setmode > sibiu.py 31, test > sibiu.py 47, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL
+70.975929:communication.py 234, arm > sibiu.py 33, test > sibiu.py 47, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle arm
+187.006866:communication.py 79, get_data > communication.py 92, get_global_position > communication.py 100, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : Got error 500: 
+187.797953:communication.py 79, get_data > communication.py 92, get_global_position > communication.py 100, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : Got error 500: 
+189.060596:communication.py 79, get_data > communication.py 92, get_global_position > communication.py 100, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : Got error 500: 
+241.876145:main.py 33, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to close program
+241.962145:sibiu.py 67, raise_exception > sibiu.py 74, close > main.py 48, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : sibiu closed
+241.962145:communication.py 260, close > communication.py 251, safe_close > main.py 49, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : comm closed
+241.962145:communication.py 114, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : gps log closed
+241.962145:main.py 51, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : close finished
+241.962145:main.py 33, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : asked to close program
+241.962145:sibiu.py 67, raise_exception > sibiu.py 74, close > main.py 48, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : sibiu closed
+241.962145:communication.py 260, close > communication.py 251, safe_close > main.py 49, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : comm closed
+241.962145:main.py 51, close > main.py 34, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : close finished
+241.962145:main.py 41, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : joy read stopped
+241.962145:logger.py 90, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed

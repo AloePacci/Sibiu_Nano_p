@@ -1,0 +1,10 @@
+171659:main.py 62, __init__ > main.py 17, __init__ > main.py 139, <module> : Connection Success
+171659:main.py 72, test > main.py 21, __init__ > main.py 139, <module> : performing test
+171659:send_messages.py 89, setmode > main.py 73, test > main.py 21, __init__ > main.py 139, <module> : change mode to ALT_HOLD
+171659:send_messages.py 46, goto_deep > main.py 77, test > main.py 21, __init__ > main.py 139, <module> : asked to go to deep 0
+173009:send_messages.py 46, goto_deep > main.py 77, test > main.py 21, __init__ > main.py 139, <module> : asked to go to deep -1
+174202:send_messages.py 46, goto_deep > main.py 77, test > main.py 21, __init__ > main.py 139, <module> : asked to go to deep -2
+175403:send_messages.py 46, goto_deep > main.py 77, test > main.py 21, __init__ > main.py 139, <module> : asked to go to deep -3
+176603:send_messages.py 46, goto_deep > main.py 77, test > main.py 21, __init__ > main.py 139, <module> : asked to go to deep -4
+177406:send_messages.py 85, disarm > main.py 79, test > main.py 21, __init__ > main.py 139, <module> : vehicle disarm
+177408:send_messages.py 89, setmode > main.py 80, test > main.py 21, __init__ > main.py 139, <module> : change mode to MANUAL

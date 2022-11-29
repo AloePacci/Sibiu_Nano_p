@@ -1,0 +1,15 @@
+nan:communication.py 100, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 57, <module> : vehicle found, starting logging
+486643:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection Success
+486646:sibiu.py 29, test > sibiu.py 44, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : performing test
+487646:communication.py 174, setmode > sibiu.py 30, test > sibiu.py 44, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to ALT_HOLD
+487646:communication.py 166, arm > sibiu.py 31, test > sibiu.py 44, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle arm
+488645:logger.py 86, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : vehicle was armed
+488645:logger.py 88, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to ALT_HOLD
+521565:main.py 64, <module> : asked to finish program
+521765:main.py 41, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : joy read stopped
+521865:communication.py 192, close > communication.py 183, safe_close > main.py 49, close > main.py 65, <module> : comm closed
+521865:main.py 51, close > main.py 65, <module> : close finished
+523265:communication.py 68, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : gps log closed
+524065:logger.py 75, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed
+600565:logger.py 88, sys_read > __init__.py 1531, notify_message_listeners > __init__.py 1053, listener > mavlink.py 240, mavlink_thread_in > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : mode changed to MANUAL

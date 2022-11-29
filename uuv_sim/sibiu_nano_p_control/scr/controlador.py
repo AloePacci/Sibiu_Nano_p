@@ -17,10 +17,10 @@ from sibiu_nano_p_control.srv import *
 #parameters
 ns=rospy.get_param('/controlador/namespace', '/sibiu_nano_p') #namespace
 debug=int(rospy.get_param('/controlador/debug_level', 2)) #nivel de debug
-tolerance=float(rospy.get_param('/controlador/tolerance', 0.1)) #tolerancia enviar respuesta servicios
+tolerance=float(rospy.get_param('/controlador/tolerance', 0.05)) #tolerancia enviar respuesta servicios
 tolerance_angular=float(rospy.get_param('/controlador/tolerance_angular', 0.1)) #tolerancia angular
 
-#input parameter
+degree_to_rad=pi/180
 
 
 
@@ -216,7 +216,7 @@ class controller:
             self.rate.sleep()
         return True
     def heading_state(self, data):
-        self.reference.angular.z=data.yaw#update reference value
+        self.reference.angular.z=data.yaw*degree_to_rad#update reference value
         self.control_heading=True#activate control
         while abs(self.reference.angular.z-self.yaw)>tolerance_angular:#stablish control exit
             self.rate.sleep()

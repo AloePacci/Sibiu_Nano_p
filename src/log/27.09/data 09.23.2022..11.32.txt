@@ -1,0 +1,2 @@
+nan:main.py 24, test > main.py 19, __init__ > main.py 56, <module> : performing test
+nan:main.py 27, test > main.py 19, __init__ > main.py 56, <module> : armed

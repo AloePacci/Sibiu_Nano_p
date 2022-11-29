@@ -1,0 +1,11 @@
+nan:communication.py 100, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS
+nan:logger.py 34, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 57, <module> : vehicle found, starting logging
+4251665:sibiu.py 20, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection Success
+4252670:communication.py 35, get_data > communication.py 49, get_acoustic_position > communication.py 59, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : Exception occured HTTPSConnectionPool(host='192.168.7.1', port=443): Max retries exceeded with url: /api/v1/position/acoustic/filtered (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000020036536160>: Failed to establish a new connection: [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión'))
+4255672:communication.py 35, get_data > communication.py 52, get_global_position > communication.py 60, read_gps_thread > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : Exception occured HTTPSConnectionPool(host='192.168.7.1', port=443): Max retries exceeded with url: /api/v1/position/global (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x00000200377E3DF0>: Failed to establish a new connection: [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión'))
+4264967:main.py 64, <module> : asked to finish program
+4264969:main.py 41, check_joy_interrupt > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : joy read stopped
+4264972:sibiu.py 64, raise_exception > sibiu.py 69, close > main.py 48, close > main.py 65, <module> : sibiu closed
+4265167:communication.py 192, close > communication.py 183, safe_close > main.py 49, close > main.py 65, <module> : comm closed
+4265267:main.py 51, close > main.py 65, <module> : close finished
+4265367:logger.py 75, save_data > threading.py 917, run > threading.py 980, _bootstrap_inner > threading.py 937, _bootstrap : log save thread closed

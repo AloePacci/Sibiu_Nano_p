@@ -12,10 +12,23 @@ roscpp
 rospy
 std_msgs
 message_generation
+dynamic_reconfigure
 )
+
+
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
+
+#add dynamic reconfigure api
+#find_package(catkin REQUIRED dynamic_reconfigure)
+generate_dynamic_reconfigure_options(
+  config/Tutorials.cfg
+  #...
+)
+
+# make sure configure headers are built before any node using them
+#add_dependencies(example_node ${PROJECT_NAME}_gencfg)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -166,6 +179,7 @@ include_directories(
  catkin_install_python(PROGRAMS
    scr/controlador.py 
    scr/planner.py 
+   scr/server.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
@@ -209,3 +223,4 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
