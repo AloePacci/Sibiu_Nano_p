@@ -127,7 +127,7 @@ class Message_sender(threading.Thread):
         if connection fails, it will log and notice reason of fail, killing the program
     """
 
-    def __init__(self, logger=None, ip="192.168.2.1", port="8002", timeout=6.0, source_system=255):     
+    def __init__(self, logger=None, ip="192.168.2.1", port="8002", timeout=6.0, source_system=255, external=False):     
         if logger is None:
             self.log=Logger()
         else:
@@ -154,8 +154,9 @@ class Message_sender(threading.Thread):
         self.gps_thread=threading.Thread(target=self.send_GPS_Mavlink)
         self.gps_thread.start()
         self.override([0,0,0,0,0,0])
-        self.control_thread=threading.Thread(target=self.send_override_Mavlink)
-        self.control_thread.start()
+        if external:
+            self.control_thread=threading.Thread(target=self.send_override_Mavlink)
+            self.control_thread.start()
 
         #instanciate PID
         self.x_axis=pid(100, 0.01, 5, 500)
