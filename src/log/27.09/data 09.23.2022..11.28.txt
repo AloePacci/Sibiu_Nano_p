@@ -1,2 +1,0 @@
-logger.py 125, print :logger.py 162, <module> : hola
-logger.py 125, print >logger.py 163, <module> : hola

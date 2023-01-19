@@ -1,1 +1,0 @@
-nan:main.py 131, conectar > main.py 61, __init__ > main.py 17, __init__ > main.py 138, <module> : Connection SUCCESS

@@ -1,7 +1,0 @@
-6848433:main.py 35, __init__ > main.py 12, main > main.py 77, <module> : Connection Success
-6848433:main.py 39, test > main.py 13, main > main.py 77, <module> : performing test
-6848433:send_messages.py 89, setmode > main.py 40, test > main.py 13, main > main.py 77, <module> : change mode to ALT_HOLD
-6848433:send_messages.py 81, arm > main.py 41, test > main.py 13, main > main.py 77, <module> : vehicle arm
-6851230:send_messages.py 85, disarm > main.py 45, test > main.py 13, main > main.py 77, <module> : vehicle disarm
-6852434:send_messages.py 89, setmode > main.py 46, test > main.py 13, main > main.py 77, <module> : change mode to MANUAL
-6872538:send_messages.py 72, play_tune > main.py 16, main > main.py 77, <module> : asked to play tune {tune}

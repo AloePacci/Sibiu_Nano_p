@@ -1,0 +1,9 @@
+# Request
+uuv_interfaces/Location samplepoint
+---
+# Result
+bool success false
+string finish_flag "unknown"
+---
+# Feedback
+float64 distance

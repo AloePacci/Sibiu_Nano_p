@@ -1,4 +1,0 @@
-1924602:main.py 17, __init__ > main.py 64, <module> : Connection Success
-1924602:main.py 22, test > main.py 65, <module> : performing test
-1924602:main.py 25, test > main.py 65, <module> : armed
-1928603:main.py 31, test > main.py 65, <module> : disarmed

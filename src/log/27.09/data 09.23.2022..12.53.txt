@@ -1,6 +1,0 @@
-4819616:main.py 32, __init__ > main.py 12, main > main.py 74, <module> : Connection Success
-4819616:send_messages.py 45, goto_deep > main.py 16, main > main.py 74, <module> : asked to go to deep 5
-4854624:main.py 35, __init__ > main.py 12, main > main.py 77, <module> : Connection Success
-4854624:send_messages.py 60, orientate > main.py 16, main > main.py 77, <module> : asked to rotate {desired_yaw}
-4873611:main.py 35, __init__ > main.py 12, main > main.py 77, <module> : Connection Success
-4873611:send_messages.py 61, orientate > main.py 16, main > main.py 77, <module> : asked to rotate {desired_yaw}

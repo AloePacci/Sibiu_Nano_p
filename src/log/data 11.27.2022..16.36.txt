@@ -1,2 +1,0 @@
-nan:communication.py 148, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS
-nan:logger.py 34, append_vehicle > sibiu.py 18, __init__ > main.py 16, __init__ > main.py 57, <module> : vehicle found, starting logging

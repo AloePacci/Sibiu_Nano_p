@@ -1,0 +1,5 @@
+#request
+bool debug False
+---
+#response
+uuv_interfaces/Sensor sensor

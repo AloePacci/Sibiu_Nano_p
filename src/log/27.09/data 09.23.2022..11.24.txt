@@ -1,1 +1,0 @@
-C:\Users\Alejandro\Documents\MEGA\6º\tfm\scripts\logger.py 125, print : hola

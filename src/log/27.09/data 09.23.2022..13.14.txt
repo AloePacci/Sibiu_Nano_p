@@ -1,2 +1,0 @@
-6118692:main.py 35, __init__ > main.py 12, main > main.py 77, <module> : Connection Success
-6118692:send_messages.py 72, play_tune > main.py 16, main > main.py 77, <module> : asked to play tune {tune}

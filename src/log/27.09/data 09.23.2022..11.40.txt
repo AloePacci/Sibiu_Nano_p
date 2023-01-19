@@ -1,4 +1,0 @@
-450638:main.py 20, __init__ > main.py 66, <module> : Connection Success
-450638:main.py 26, test > main.py 21, __init__ > main.py 66, <module> : performing test
-450638:main.py 29, test > main.py 21, __init__ > main.py 66, <module> : armed
-453637:main.py 35, test > main.py 21, __init__ > main.py 66, <module> : disarmed

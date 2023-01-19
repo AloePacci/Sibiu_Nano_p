@@ -1,8 +1,0 @@
-5980651:main.py 35, __init__ > main.py 12, main > main.py 77, <module> : Connection Success
-5980651:send_messages.py 72, play_tune > main.py 16, main > main.py 77, <module> : asked to play tune {tune}
-5988650:main.py 35, __init__ > main.py 12, main > main.py 77, <module> : Connection Success
-5988650:send_messages.py 72, play_tune > main.py 16, main > main.py 77, <module> : asked to play tune {tune}
-5999604:main.py 35, __init__ > main.py 12, main > main.py 77, <module> : Connection Success
-5999604:send_messages.py 72, play_tune > main.py 16, main > main.py 77, <module> : asked to play tune {tune}
-6007677:main.py 35, __init__ > main.py 12, main > main.py 77, <module> : Connection Success
-6007677:send_messages.py 72, play_tune > main.py 16, main > main.py 77, <module> : asked to play tune {tune}

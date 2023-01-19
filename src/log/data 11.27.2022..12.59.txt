@@ -1,1 +1,0 @@
-nan:communication.py 146, __init__ > sibiu.py 17, __init__ > main.py 16, __init__ > main.py 57, <module> : Connection SUCCESS

@@ -1,2 +1,0 @@
-4694697:main.py 30, __init__ > main.py 12, main > main.py 72, <module> : Connection Success
-4694697:send_messages.py 45, goto_deep > main.py 16, main > main.py 72, <module> : asked to go to deep {deepness}
