@@ -40,7 +40,7 @@ set(srv_files
   "srv/PlannerParams.srv"
   "srv/SensorParams.srv"
   "srv/CommandInt.srv"
-  "srv/RC_Override.srv"
+  "srv/RCOverride.srv"
   #"srv/Service2.srv"
    # etc
   )

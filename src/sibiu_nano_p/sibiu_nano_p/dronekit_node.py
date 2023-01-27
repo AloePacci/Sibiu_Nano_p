@@ -18,7 +18,7 @@ import threading
 from numpy import uint
 #import intefaces
 from uuv_interfaces.msg import Status, Nodeupdate, Camera, Obstacles, Location
-from uuv_interfaces.srv import CommandBool, ASVmode, Newpoint, Takesample, CommandStr, CommandInt, RC_Override
+from uuv_interfaces.srv import CommandBool, ASVmode, Newpoint, Takesample, CommandStr, CommandInt, RCOverride
 from uuv_interfaces.action import Goto, SensorSample
 
 
@@ -163,7 +163,7 @@ class Dronekit_node(Node):
         self.reset_home_service = self.create_service(CommandBool, 'reset_home', self.reset_home_callback)
         self.goto_deep_service = self.create_service(Newpoint, 'goto_deep', self.goto_deep_callback)
         self.orientate_service = self.create_service(Newpoint, 'orientate', self.orientate_callback)
-        self.override_service = self.create_service(RC_Override, 'override_RC', self.override_RC_callback)
+        self.override_service = self.create_service(RCOverride, 'override_RC', self.override_RC_callback)
         self.set_sysid_service = self.create_service(CommandInt, 'set_sysid', self.set_sys_id_callback)
         self.close_service = self.create_service(CommandBool, 'close', self.close_callback)
         self.playtune_service = self.create_service(CommandStr, 'playtune', self.play_tune_callback)
