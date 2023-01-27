@@ -1,0 +1,5 @@
+#request
+uint8 value 0
+---
+#response
+bool success

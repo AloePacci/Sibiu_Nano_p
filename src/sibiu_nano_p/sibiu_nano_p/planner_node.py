@@ -15,8 +15,8 @@ class Planner_node(Node):
 
     # his functions defines and assigns value to the
     def parameters(self):
-        self.declare_parameter('map_filename', 'Alamillo95x216')
-        path = "~/ASV_Loyola_US/mapas/" + self.get_parameter('map_filename').get_parameter_value().string_value
+        self.declare_parameter('map_filename', 'zufre')
+        path = "~/Sibiu_Nano_P/mapas/" + self.get_parameter('map_filename').get_parameter_value().string_value
         self.map_filepath = os.path.expanduser(path)
         self.declare_parameter('debug', False)
         self.DEBUG = self.get_parameter('debug').get_parameter_value().bool_value

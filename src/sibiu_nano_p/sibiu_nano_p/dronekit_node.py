@@ -8,14 +8,17 @@ from dronekit import connect, VehicleMode, LocationGlobal
 import numpy as np
 import pymavlink
 import traceback
-from math import atan2
+import math
+from math import sqrt, pow, atan2
 from .submodulos.dictionary import dictionary
 import time
 from pymavlink.dialects.v20 import ardupilotmega as mavlink2 #for obstacle distance information
+from pymavlink.quaternion import QuaternionBase
+import threading
 from numpy import uint
 #import intefaces
 from uuv_interfaces.msg import Status, Nodeupdate, Camera, Obstacles, Location
-from uuv_interfaces.srv import CommandBool, ASVmode, Newpoint, Takesample
+from uuv_interfaces.srv import CommandBool, ASVmode, Newpoint, Takesample, CommandStr, CommandInt, RC_Override
 from uuv_interfaces.action import Goto, SensorSample
 
 
@@ -24,6 +27,104 @@ os.environ["MAVLINK20"] = "1"
 
 # This node generates the necessary services for  comunication towards the drone
 #parameters are only read at start
+
+#we define a simple PID
+class pid:
+    def __init__(self, kp, ki, kd, sat):
+        self.kp=kp
+        self.ki=ki
+        self.kd=kd
+        self.dererr=0.0
+        self.interr=0.0
+        self.sat=sat
+
+    def derivative(self, error):
+        a=self.dererr
+        self.dererr=error
+        return self.kd*(error-a)
+
+    def integral(self, error):
+        if self.sat==0 or (abs(self.proportional(error)+self.interr * self.ki)<self.sat):
+            self.interr+=error
+        return self.interr * self.ki
+
+    def proportional(self, error):
+        return error*self.kp
+
+    def PD(self, error):
+        return self.proportional(error)+self.derivative(error)
+    
+    def PI(self, error):
+        return self.proportional(error)+self.integral(error)
+
+    def PID(self, error):
+        output=self.proportional(error)+self.integral(error)+self.derivative(error)
+        if abs(output)<self.sat:
+            return int(output)
+        if output>self.sat:
+            return self.sat
+        return -self.sat
+
+
+#this class downloads gps data from Waterlinked
+class GPS_handler():
+    def __init__(self, url="http://192.168.7.1", antenna_position=None, depth = None):     
+        self.url=url
+        if logger is None:
+            self.log=Logger()
+        else:
+            self.log=logger   
+        self.__close__=False
+
+        #create thread to read GPS
+        self.gps_thread=threading.Thread(target=self.read_gps_thread)
+        self.gps_thread.start()
+        self.get_logger().info(f'GPS read started') 
+        
+    def get_data(self, url):
+        try:
+            r = requests.get(url)
+        except requests.exceptions.RequestException as exc:
+            self.get_logger().error("Exception occured {}".format(exc))
+            return None
+
+        if r.status_code != requests.codes.ok:
+            self.get_logger().error("Got error {}: {}".format(r.status_code, r.text))
+            return None
+
+        return r.json()
+
+
+    def get_antenna_position(self):
+        return self.get_data(f"{self.url}/api/v1/config/antenna")
+
+    def get_acoustic_position(self):
+        return self.get_data(f"{self.url}/api/v1/position/acoustic/filtered")
+
+    def get_global_position(self, acoustic_depth = None):
+        return self.get_data(f"{self.url}/api/v1/position/global")
+
+    def close(self):
+        self.__close__=True
+
+    def read_gps_thread(self):
+        while not self.__close__:
+            acoustic_position = self.get_acoustic_position()
+            global_position = self.get_global_position()
+            try:
+                    #if acoustic_position["position_valid"]==True:
+                    self.depth = acoustic_position["z"]
+                    self.x=acoustic_position['x']
+                    self.y=acoustic_position['y']
+                    self.lat=global_position['lat']
+                    self.lon=global_position['lon']
+                    self.hdop=global_position['hdop']
+                    #else:
+                    #   print(f"invalid_pos {[acoustic_position['x'], acoustic_position['y']]}")
+            except:
+                pass
+            time.sleep(0.05) #limit refresh rate
+        self.get_logger().info("gps log closed")
 
 class Dronekit_node(Node):
 
@@ -38,11 +139,11 @@ class Dronekit_node(Node):
 
     #his functions defines and assigns value to the parameters
     def parameters(self):
-        self.declare_parameter('vehicle_ip', 'tcp:navio.local:5678')
+        self.declare_parameter('vehicle_ip', '192.168.2.1:8002')
         self.vehicle_ip = self.get_parameter('vehicle_ip').get_parameter_value().string_value
         self.declare_parameter('connect_timeout', 15)
         self.connect_timeout = self.get_parameter('connect_timeout').get_parameter_value().integer_value
-        self.declare_parameter('max_distance', 5000)
+        self.declare_parameter('max_distance', 100)
         self.max_distance = self.get_parameter('max_distance').get_parameter_value().integer_value
         self.declare_parameter('vehicle_id', 1)
         self.vehicle_id=self.get_parameter('vehicle_id').get_parameter_value().integer_value
@@ -50,6 +151,8 @@ class Dronekit_node(Node):
         self.arm_timeout = self.get_parameter('arm_timeout').get_parameter_value().integer_value
         self.declare_parameter('travelling_timeout', 60)
         self.travelling_timeout = self.get_parameter('travelling_timeout').get_parameter_value().integer_value
+        self.declare_parameter('override_control', False)
+        self.override_control = self.get_parameter('travelling_timeout').get_parameter_value().bool_value
 
 
     #this function declares the services, its only purpose is to keep code clean
@@ -58,6 +161,12 @@ class Dronekit_node(Node):
         self.arm_vehicle_service = self.create_service(CommandBool, 'arm_vehicle', self.arm_vehicle_callback)
         self.change_ASV_mode_service = self.create_service(ASVmode, 'change_asv_mode', self.change_asv_mode_callback)
         self.reset_home_service = self.create_service(CommandBool, 'reset_home', self.reset_home_callback)
+        self.goto_deep_service = self.create_service(Newpoint, 'goto_deep', self.goto_deep_callback)
+        self.orientate_service = self.create_service(Newpoint, 'orientate', self.orientate_callback)
+        self.override_service = self.create_service(RC_Override, 'override_RC', self.override_RC_callback)
+        self.set_sysid_service = self.create_service(CommandInt, 'set_sysid', self.set_sys_id_callback)
+        self.close_service = self.create_service(CommandBool, 'close', self.close_callback)
+        self.playtune_service = self.create_service(CommandStr, 'playtune', self.play_tune_callback)
 
         #client
         self.asv_mission_mode_client = self.create_client(ASVmode, 'change_mission_mode')
@@ -97,11 +206,9 @@ class Dronekit_node(Node):
         try:
             self.vehicle = connect(self.vehicle_ip, timeout=self.connect_timeout, source_system=1, source_component=93)
             self.dictionary()
-            self.rc_read_timer=self.create_timer(0.1, self.rc_read_callback)
             self.declare_topics()
             self.declare_services()
             self.declare_actions()
-            self.vehicle.add_message_listener('SYS_STATUS', self.vehicle_status_callback)
             self.cmds = self.vehicle.commands
             self.get_logger().info(f"Waiting for initialization")
             self.cmds.download()
@@ -109,23 +216,49 @@ class Dronekit_node(Node):
             self.home = self.vehicle.home_location
             self.get_logger().info(f"Vehicle home location is {self.home}")
         except ConnectionRefusedError:
-            self.get_logger().error(f"Connection to navio2 was refused")
+            self.get_logger().error(f"Connection to UUV was refused")
             self.get_logger().fatal("Drone module is dead")
             self.destroy_node()
+            return
         except OSError:
-            self.get_logger().error(f"Navio2 was not found in the same network")
+            self.get_logger().error(f"UUV was not found in the same network")
             self.get_logger().fatal("Drone module is dead")
             self.destroy_node()
+            return
         except TimeoutError:
-            self.get_logger().error(f"Navio2 port was busy, timeout error")
+            self.get_logger().error(f"UUV port was busy, timeout error")
             self.get_logger().fatal("Drone module is dead")
             self.destroy_node()
+            return
         except:
             error = traceback.format_exc()
-            self.get_logger().error(f"Connection to navio2 could not be made, unknown error:\n {error}")
+            self.get_logger().error(f"Connection to UUV could not be made, unknown error:\n {error}")
             self.get_logger().fatal("Drone module is dead")
             self.destroy_node()
+            return
+    self.get_logger().info(f"Connection SUCCESS")
+        self.gps=GPS_handler(logger=self.log)
+        self.sensor=Sensor()
+        self.__stop__=False
+        #create thread to send GPS data
 
+        self.gps_thread=threading.Thread(target=self.send_GPS_Mavlink)
+        self.gps_thread.start()
+
+        if self.override_control:
+            self.get_logger().info(f'control type override') 
+            self.override([0,0,0,0,0,0]) #override values
+            self.control_thread=threading.Thread(target=self.override_iteration)
+            self.control_thread.start()
+            #instanciate PID
+            self.x_axis=pid(100, 0.01, 5, 500)
+            self.y_axis=pid(100, 0.01, 5, 500) 
+            self.z_axis=pid(150, 1, 60, 500) 
+            self.roll_axis=pid(100, 0, 400, 500)
+            self.pitch_axis=pid(100, 0, 400, 500) 
+            self.yaw_axis=pid(0.8, 0.02 , 0.1, 200)
+
+            self.last=[] #last values for detecting changes reducing overhead
         
 
     def arm_vehicle_callback(self, request, response):
@@ -295,14 +428,10 @@ class Dronekit_node(Node):
         if self.goto_goal_handle is not None and self.goto_goal_handle.is_active:
             self.get_logger().error(f'Action is busy')
             return GoalResponse.REJECT
-        if not self.vehicle.armed or self.vehicle.mode != VehicleMode("LOITER"):
-            self.get_logger().error(f'Error: vehicle should be armed and in loiter mode\nbut arming is {self.vehicle.armed} and vehicle is in {self.vehicle.mode}.')
+        if not self.vehicle.armed:
+            self.get_logger().error(f'Error: vehicle should be armed. Vehicle is in {self.vehicle.mode}.')
             if not self.vehicle.ekf_ok:
-                self.get_logger().error(f"EKF seems to be the main issue, System Status: mode {self.vehicle.mode.name}, GPS_status: {self.vehicle.gps_0}, System status: {self.vehicle.system_status.state}, System able to arm {self.vehicle.is_armable}")
-            return GoalResponse.REJECT #To move we must be armed and in loiter
-        if self.status.manual_mode:
-            self.get_logger().error(f'RC in manual mode, action rejected')
-            return GoalResponse.REJECT
+                self.get_logger().error(f"EKF fail, System Status: mode {self.vehicle.mode.name}, GPS_status: {self.vehicle.gps_0}, System status: {self.vehicle.system_status.state}, System able to arm {self.vehicle.is_armable}")
         self.get_logger().info(f'Action accepted')
         return GoalResponse.ACCEPT
 
@@ -360,7 +489,7 @@ class Dronekit_node(Node):
                 if goal_handle.is_cancel_requested:#event mission canceled
                     #make it loiter around actual position
                     goal_handle.canceled()
-                    self.vehicle.mode = VehicleMode("LOITER")
+                    self.vehicle.mode = VehicleMode("ALT_HOLD")
                     self.get_logger().info('Goto Action canceled')
                     result.finish_flag = "Action cancelled"
                     return result
@@ -433,7 +562,7 @@ class Dronekit_node(Node):
                 self.get_logger().info(f"waypoint reached going to [{path[1].lat},{path[1].lon}")
             path.pop(0)
         # after reaching samplepoint
-        self.vehicle.mode = VehicleMode("LOITER")
+        self.vehicle.mode = VehicleMode("ALT_HOLD")
         goal_handle.succeed()
         self.get_logger().info('Goal reached, waiting for sample')
         self.waiting_for_sensor_read=True
@@ -482,40 +611,6 @@ class Dronekit_node(Node):
                 else:
                     return response
                 break
-
-
-    def rc_read_callback(self):
-        #if there is no RC return home
-        try:
-            #manage no RC detected
-            if all([self.vehicle.channels['5'] == 0, self.vehicle.channels['6'] == 0]):
-                if self.vehicle.mode != VehicleMode("RTL"):
-                    self.get_logger().info("seems there is no RC connected", once=True)
-                    self.status.manual_mode = False #override RC if there is no connection
-                    #self.vehicle.mode = VehicleMode("RTL")
-            #manage RC switch between auto and manual mode
-            elif self.status.manual_mode!=(self.vehicle.channels['6']>1200):
-                self.get_logger().info("manual interruption" if self.vehicle.channels['6']>1200 else "automatic control regained")
-                self.status.manual_mode=bool(self.vehicle.channels['6']>1200)
-
-            #manage arm when RC in manual
-            elif self.status.manual_mode:                
-                if self.vehicle.mode != VehicleMode("MANUAL") : #vehicle is not in desired mode
-                    self.get_logger().info("manual switching vehicle mode to manual")
-                    self.vehicle.mode = VehicleMode("MANUAL")
-                if self.vehicle.armed!=(self.vehicle.channels['5']>1200):
-                    if self.vehicle.channels['5']>1200:
-                        self.vehicle.arm()
-                        self.get_logger().info("manual arm")
-                    else:
-                        self.vehicle.disarm()
-                        self.get_logger().info("manual disarm")
-        except:
-            pass
-
-    def vehicle_status_callback(self, vehicle, name, msg):
-        pass
-        #self.get_logger().info(f"{name} : {msg}")
 
     def dictionary(self):
         self.mode_type=dictionary("ASV_MODE")
@@ -567,6 +662,8 @@ class Dronekit_node(Node):
 
 
     #TODO: Dronekit is not able to send this message
+
+
     """
     This function is called as a callback from the topic obstacles
     @params distance, angle_increment:   arrays indicating in each index distance and angle occupied by an obstacle.
@@ -611,7 +708,108 @@ class Dronekit_node(Node):
 
     def reset_home_callback(self, request, response):
         self.vehicle.home_location = self.vehicle.location.global_frame
+        response.success=True
+        return response
+
+
+
+    def goto_deep_callback(self, request, response):
+        self.get_logger().info(f'going to deep: {request.new_point.deepness}') 
+        deep=-int(abs(request.new_point.deepness))
+        msg=mavlink2.MAVLink_set_position_target_global_int_message(
+            0, 0, 0,  # time (not used), target system, target component
+            0, #MAV_FRAME_GLOBAL
+            0b110111111000,  # yaw_rate,yaw,unused,Az,Ay,Ax,Vz,Vy,Vx,Z,Y,X
+            0,  # lat e7    
+            0,  # lon e7
+            int(deep),
+            0,0,0, #vx,vy,vz
+            0,0,0, #ax,ay,az
+            0,  # yaw
+            0)  # yaw rate
+        self.vehicle.send_mavlink(msg)
+        response.success=True
+        return response
+
+    def orientate_callback(self, request, response):
+        self.get_logger().info(f'rotating to: {request.new_point.orientation}') 
+        msg = mavlink2.MAVLink_set_attitude_target_message(
+            0, 0, 0,  # time (not used), target system, target component
+            0b00000111,  # attitude, throttle, uns,uns,uns,yawrate,pitchrate,rollrate
+            QuaternionBase([math.radians(angle) for angle in (0,0,request.new_point.orientation)]), #quaternion
+            0,0,0,0)  # roll rate, pitch rate, yaw rate, thrust
+        # send command to vehicle
+        self.vehicle.send_mavlink(msg)
+        response.success=True
+        return response
         
+    def play_tune_callback(self, request, response):
+        self.get_logger().info(f"asked to play tune {request.string}")
+        msg=mavlink2.MAVLink_play_tune_message(
+        0, 0,  #target system, target component
+        bytes('', 'utf-8'), #format
+        bytes('', 'utf-8') #tune
+        )
+        self.vehicle.send_mavlink(msg)
+        response.success=True
+        return response
+
+    def close_callback(self, request, response):
+        self.gps.close()
+        self.get_logger().info("comm closed")
+        self.vehicle.disarm()
+        self.vehicle.mode = VehicleMode("MANUAL")
+        self.vehicle.close()
+        self.__stop__=True
+        response.success=True
+        return response
+
+    def override_iteration(self):
+        try:
+            errorx=self.override["x"]-self.gps.x
+            errory=self.override["y"]-self.gps.y
+        except:
+            errorx=0
+            errory=0
+        errorz=self.override["z"]-self.vehicle.location.global_frame.alt
+        if self.last==[errorx,errory,errorz,self.vehicle.attitude.roll,self.vehicle.attitude.pitch,self.vehicle.heading]: #avoid unnecesary iterations
+            return 
+        else:
+            self.last=[errorx,errory,errorz,self.vehicle.attitude.roll,self.vehicle.attitude.pitch,self.vehicle.heading]
+        
+        #for heading
+        #force simetry
+        vehicleheading=self.vehicle.heading
+        if vehicleheading>180:
+            vehicleheading=360-vehicleheading
+        if abs(heading-vehicleheading) > 180: #we choose the shortest path
+                    if heading>0:
+                        heading-=360
+                    else:
+                        heading+=360
+        rolsignal=self.roll_axis.PID(-self.vehicle.attitude.roll)
+        pitchsignal=self.pitch_axis.PID(self.vehicle.attitude.pitch)
+        yawsignal=self.yaw_axis.PID(self.override["yaw"]-vehicleheading)
+        angulo_ataque=self.vehicle.heading
+        distance=sqrt(pow(errorx,2)+pow(errory,2))
+        xvalue=int(self.x_axis.PID(distance)*math.sin(angulo_ataque))
+        yvalue=int(self.y_axis.PID(distance)*math.cos(angulo_ataque))
+        zvalue=self.z_axis.PID(errorz)
+
+
+    def set_sys_id_callback(self, request, response):
+        #self.vehicle.parameters['SYSID_MYGCS']=request.value
+        response.success=True
+        return response
+        
+
+    
+    def override_RC_callback(self, request, response):
+        self.override={"x":request.x,"y":request.y,"z":request.z,"roll":request.roll,"pitch":request.pitch,"yaw":request.yaw}
+        response.success=True
+        return response
+
+
 def main(args=None):
     #init ROS2
     rclpy.init(args=args)

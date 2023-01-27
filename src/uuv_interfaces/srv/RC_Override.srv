@@ -1,0 +1,11 @@
+#request
+float64 x 1500
+float64 y 1500
+float64 z 1500
+float64 roll 1500
+float64 pitch 1500
+float64 yaw 1500
+
+---
+#response
+bool success

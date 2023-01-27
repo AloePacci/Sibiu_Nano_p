@@ -22,7 +22,7 @@ class Mission_node(Node):
 
     #this functions defines and assigns value to the variables defined in /config/config.yaml
     def parameters(self):
-        self.declare_parameter('mission_filepath', "MisionesLoyola_dron_2.kml")
+        self.declare_parameter('mission_filepath', "Mision1.kml")
         path="~/ASV_Loyola_US/"+self.get_parameter('mission_filepath').get_parameter_value().string_value
         self.mission_filepath = os.path.expanduser(path)
         self.declare_parameter('debug', False)
@@ -168,7 +168,7 @@ class Mission_node(Node):
                         self.get_logger().info("The vehicle is not able to go into automatic mode")
                         self.mission_mode=0
                 else:
-                    self.change_ASV_mode("LOITER")
+                    self.change_ASV_mode("ALT_HOLD")
                     self.arm_vehicle(True)
                     self.get_logger().info("vehicle in \'STANDBY\' mode")
             if self.status.manual_mode:
@@ -189,7 +189,7 @@ class Mission_node(Node):
                     self.get_logger().info("no preloaded mission, call \"/load_mission\" service")
                     self.mission_mode = 1 #return vehicle to
                 else:
-                    self.change_ASV_mode("LOITER")
+                    self.change_ASV_mode("ALT_HOLD")
                     self.arm_vehicle(True)
                     self.get_logger().info(f"Starting Pre-loaded Mission {self.mission_filepath}")
             else: #we arrive here, so we have a mission to follow
@@ -219,7 +219,7 @@ class Mission_node(Node):
                     self.get_logger().info("The vehicle is not able to go into automatic mode")
                     self.mission_mode=0
                 else:
-                    self.change_ASV_mode("LOITER")
+                    self.change_ASV_mode("ALT_HOLD")
                     self.arm_vehicle(True)
                     self.get_logger().info("vehicle in \'SIMPLE POINT\' mode")
             if self.mqtt_waypoint is not None and not self.waiting_for_action: #if we have a point and we are not busy
@@ -512,7 +512,7 @@ class Mission_node(Node):
             elif self.mission_mode == 2 or self.mission_mode == 4:#mission was rejected, but we want to do a mission, probably drone started in a wrong state, or it is busy
                 if self.status.armed:
                     self.get_logger().info('Vehicle in wrong state, trying to recover')
-                    self.change_ASV_mode("LOITER")
+                    self.change_ASV_mode("ALT_HOLD")
                     self.get_logger().info(f'asking again to go to {self.point_backup}')
                     sleep(2) #sleep to avoid spamming points
                     goal_msg = Goto.Goal()

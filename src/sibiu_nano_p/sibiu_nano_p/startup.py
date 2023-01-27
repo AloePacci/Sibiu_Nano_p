@@ -7,7 +7,7 @@ import os
 import subprocess  # For executing a shell command
 
 def get_vehicle_id():
-    with open('/home/xavier/ASV_Loyola_US/src/asv_loyola_us/config/config.yaml', 'r') as f:
+    with open('~/Sibiu_Nano_P/src/sibiu_nano_p/config/config.yaml', 'r') as f:
         for line in f:
             line=line.strip().replace(" ", "").split(":")
             if line[0]=="vehicle_id":
@@ -18,13 +18,12 @@ class startup:
         self.vehicle_id=get_vehicle_id()
         kill_ros2() #if this program is called from a crash, close last ros2 session
         self.asv_offline=True #we start offline
-        kill_ssh_tunelling()
         while not ping_google():
             print("There is no internet connection, retrying...")
             sleep(1)
         try:
-            print(f"MQTT connecting to dronesloyolaus.eastus.cloudapp.azure.com")
-            self.mqtt = MQTT(str(self.vehicle_id), addr="dronesloyolaus.eastus.cloudapp.azure.com", topics2suscribe=[f"veh{self.vehicle_id}"], on_message=self.on_message, on_disconnect=self.on_disconnect)
+            print(f"MQTT connecting to server")
+            self.mqtt = MQTT(str(self.vehicle_id), addr="127.0.0.1", topics2suscribe=[f"veh{self.vehicle_id}"], on_message=self.on_message, on_disconnect=self.on_disconnect)
         except ConnectionRefusedError:
             print(f"Connection to MQTT server was refused")
         except OSError:
