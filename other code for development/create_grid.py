@@ -435,8 +435,8 @@ def main():
     """
     
     #zufre
-    NW_corner=[37.85161486352038, -6.332259767221408] #northwest point of the map [latitude longitude]
-    SE_corner=[37.789724489452645, -6.261828046462566] #southeast point of the map [latitude longitude]
+    NW_corner=[36.12303006842699, -5.442119480182076] #northwest point of the map [latitude longitude]
+    SE_corner=[36.116452478945654, -5.431589167369108] #southeast point of the map [latitude longitude]
 
     
     #SE_corner=[37.29989089621092, -5.9274044593699236]
@@ -444,7 +444,7 @@ def main():
     
     
     #create class of the map downloader 
-    gmd = GoogleMapDownloader(NW_corner ,SE_corner, zoom=17) #zoom 19, aproximadamente tiles de 50m^2, más zoom no se aprecian obstaculos nuevos
+    gmd = GoogleMapDownloader(NW_corner ,SE_corner, zoom=15) #zoom 19, aproximadamente tiles de 50m^2, más zoom no se aprecian obstaculos nuevos
     
     
     #show the grid on the image
@@ -472,7 +472,7 @@ def main():
     #plt.show()
     
     #create grid
-    grid= gridder(NW_corner,SE_corner,grid_size, zoom=17)
+    grid= gridder(NW_corner,SE_corner,grid_size, zoom=15)
 
 
     #show the grid on the image

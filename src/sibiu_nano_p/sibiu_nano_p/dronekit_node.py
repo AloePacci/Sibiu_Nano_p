@@ -364,7 +364,7 @@ class Dronekit_node(Node):
         Args:
             goal_loc: Reference position (dronekit.LocationGlobal).
         Returns:
-            'True' if the ASV distance respecto to the target Waypoint is less than 0.5 meters.
+            'True' if the UUV distance respecto to the target Waypoint is less than 0.5 meters.
         """
 
         return self.calculate_distance(goal_loc) < 1.5
@@ -378,7 +378,7 @@ class Dronekit_node(Node):
         Args:
             goal_loc: Reference position (dronekit.LocationGlobal).
         Returns:
-            distance from the ASV to the goal_loc in meters
+            distance from the UUV to the goal_loc in meters
         """
 
         # Convert to radians #
@@ -391,7 +391,7 @@ class Dronekit_node(Node):
         d_lat = lat2 - lat1
         d_lon = lon2 - lon1
 
-        # Returns True if the waypoint is within 1.5 meters the ASV position
+        # Returns True if the waypoint is within 1.5 meters the UUV position
         a = np.sin(0.5 * d_lat) ** 2 + np.sin(0.5 * d_lon) ** 2 * np.cos(lat1) * np.cos(lat2)
         c = 2.0 * np.arctan2(np.sqrt(a), np.sqrt(1.0 - a))
         return 6378100.0 * c
@@ -516,7 +516,7 @@ class Dronekit_node(Node):
                     ekf_counter+=1
                 
                 elif self.vehicle.mode != VehicleMode("GUIDED"): #vehicle is not in desired mode
-                    self.get_logger().warning("asv_mode was changed externally")
+                    self.get_logger().warning("uuv_mode was changed externally")
                     if ekf_failed:
                         self.get_logger().info("EKF failsafe cleared, resuming mission")
                         self.get_logger().info(f"System Status: mode {self.vehicle.mode.name}, GPS_status: {self.vehicle.gps_0}, System status: {self.vehicle.system_status.state}, System able to arm {self.vehicle.is_armable} ")
@@ -621,7 +621,7 @@ class Dronekit_node(Node):
     """   
     def cancel_sensor_read(self):
         if self.waiting_for_sensor_read: #if the action was active
-            self.get_logger().info("the asv was taking a sample, canceling")
+            self.get_logger().info("the uuv was taking a sample, canceling")
             self.sensor_goal_handle.cancel_goal_async()
         pass
 
